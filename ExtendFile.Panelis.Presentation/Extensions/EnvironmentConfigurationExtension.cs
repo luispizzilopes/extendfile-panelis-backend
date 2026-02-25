@@ -9,6 +9,7 @@ public static class EnvironmentConfigurationExtension
         builder.Configuration
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables();
+            .AddEnvironmentVariables()
+            .AddUserSecrets<Program>(optional: true);
     }
 }
