@@ -55,5 +55,3 @@ nunit-*.xml
 
 .DS_Store
 .idea
-
-ExtendFile.Panelis.Presentation/Properties/launchSettings.json
