@@ -6,4 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ExtendFile.Panelis.Application\ExtendFile.Panelis.Application.csproj" />
+      <ProjectReference Include="..\ExtendFile.Panelis.Domain\ExtendFile.Panelis.Domain.csproj" />
+      <ProjectReference Include="..\ExtendFile.Panelis.Infrastructure\ExtendFile.Panelis.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
