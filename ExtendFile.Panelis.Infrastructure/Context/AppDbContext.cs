@@ -1,0 +1,22 @@
+using ExtendFile.Panelis.BuildingBlocks.Common.Interfaces.Events;
+using ExtendFile.Panelis.Domain.Modules.Cat.Aggregates;
+using ExtendFile.Panelis.Domain.Modules.House.Aggregates;
+using ExtendFile.Panelis.Infrastructure.Interceptor;
+using Microsoft.EntityFrameworkCore;
+
+namespace ExtendFile.Panelis.Infrastructure.Context;
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+    public virtual DbSet<House> Houses { get; set; }
+    public virtual DbSet<Cat> Cats { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        modelBuilder.Ignore<List<IDomainEvent>>();
+    }
+}
