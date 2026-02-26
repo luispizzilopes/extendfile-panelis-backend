@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.1-alpha] - 2025-02-25
 
 ### Added
+- **[EBP-003]** Adiciona o método de buscar os gatos por ID do box no repositório CatRepository
 - **[EBP-002]** Adiciona as funcionalidades de CRUD dos boxes dos prédios
 - **[EBP-001]** Adiciona as funcionalidades de CRUD dos prédios/casas
 - **[EBP-000]** Atualiza o README do projeto

@@ -1,6 +1,7 @@
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Cat;
 using ExtendFile.Panelis.Domain.Modules.Cat.ValueObject;
+using ExtendFile.Panelis.Domain.Modules.House.ValueObject;
 using ExtendFile.Panelis.Infrastructure.Context;
 using ExtendFile.Panelis.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,16 @@ public class CatRepository : ICatRepository
         return await _context.Cats
             .Where(x => x.Id == CatId.Create(id))
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<PaginedResult<Aggregates.Cat>> GetCatsByBoxIdAsync(
+        PaginationParams paginationParams, 
+        Guid boxId, 
+        CancellationToken cancellationToken)
+    {
+        return await _context.Cats
+            .Where(x => x.BoxId == BoxId.Create(boxId))
+            .PaginationAsync(paginationParams, cancellationToken);
     }
 
     public async Task<PaginedResult<Aggregates.Cat>> GetCatsAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
