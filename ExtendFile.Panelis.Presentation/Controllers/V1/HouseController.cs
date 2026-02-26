@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using ExtendFile.Panelis.Application.Modules.House.Requests.CreateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Requests.UpdateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Requests.DeleteHouse;
+using ExtendFile.Panelis.Application.Modules.House.Requests.CreateBox;
+using ExtendFile.Panelis.Application.Modules.House.Requests.UpdateBox;
+using ExtendFile.Panelis.Application.Modules.House.Requests.DeleteBox;
 using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouseById;
 using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouses;
 using ExtendFile.Panelis.Application.Modules.House.Queries.GetHouseById;
@@ -11,8 +14,12 @@ using ExtendFile.Panelis.Application.Modules.House.Queries.GetAllHouses;
 using ExtendFile.Panelis.Application.Modules.House.Commands.CreateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Commands.UpdateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Commands.DeleteHouse;
+using ExtendFile.Panelis.Application.Modules.House.Commands.CreateBox;
+using ExtendFile.Panelis.Application.Modules.House.Commands.UpdateBox;
+using ExtendFile.Panelis.Application.Modules.House.Commands.DeleteBox;
 using ExtendFile.Panelis.Application.Modules.House.Responses;
 using ExtendFile.Panelis.Application.Modules.House.Responses.DeleteHouse;
+using ExtendFile.Panelis.Application.Modules.House.Responses.DeleteBox;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Presentation.Extensions;
 
@@ -101,6 +108,62 @@ public class HouseController : ControllerBase
     public async Task<IActionResult> CreateHouse([FromBody] CreateHouseRequest request)
     {
         var command = new CreateHouseCommand(request);
+        var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Cria um novo box em uma casa/prédio
+    /// </summary>
+    /// <param name="request">Dados do box a ser criado</param>
+    /// <returns>Retorna os dados do box criado</returns>
+    [HttpPost("box")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(BoxDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> CreateBox([FromBody] CreateBoxRequest request)
+    {
+        var command = new CreateBoxCommand(request);
+        var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Atualiza um box existente
+    /// </summary>
+    /// <param name="request">Dados do box a ser atualizado</param>
+    /// <returns>Retorna os dados do box atualizado</returns>
+    [HttpPut("box")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(BoxDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateBox([FromBody] UpdateBoxRequest request)
+    {
+        var command = new UpdateBoxCommand(request);
+        var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Exclui um box existente
+    /// </summary>
+    /// <param name="request">ID do box a ser excluído e de sua respectiva casa/prédio</param>
+    /// <returns>Retorna sucesso da operação</returns>
+    [HttpDelete("box")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(DeleteBoxResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteBox([FromBody] DeleteBoxRequest request)
+    {
+        var command = new DeleteBoxCommand(request);
         var result = await _mediator.Send(command);
         return result.ToActionResult(this);
     }

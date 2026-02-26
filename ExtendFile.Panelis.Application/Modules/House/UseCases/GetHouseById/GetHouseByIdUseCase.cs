@@ -27,7 +27,15 @@ public class GetHouseByIdUseCase
             Id = result.Id.Value,
             Name = result.Name,
             CreatedAt = result.CreatedAt,
-            UpdatedAt = result.UpdatedAt
+            UpdatedAt = result.UpdatedAt,
+            Boxes = result.Boxes.Select(x => new BoxDto
+            {
+                Id = x.Id.Value, 
+                Name = x.Name, 
+                CreatedAt = x.CreatedAt, 
+                UpdatedAt = x.UpdatedAt, 
+                HouseId = result.Id.Value 
+            }).ToList()
         };
     }
 }

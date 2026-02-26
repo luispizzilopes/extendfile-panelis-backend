@@ -44,4 +44,9 @@ public class House : AggregateRoot<HouseId>
     {
         _boxes.Add(box);
     }
+
+    public void RemoveBox(Box box)
+    {
+        _boxes.Remove(box);
+    }
 }

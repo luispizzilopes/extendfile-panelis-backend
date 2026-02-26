@@ -23,6 +23,7 @@ public class HouseRepository : IHouseRepository
     {
         return await _context.Houses
             .Where(x => x.Id == HouseId.Create(id))
+            .Include(x => x.Boxes)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -31,6 +32,7 @@ public class HouseRepository : IHouseRepository
         CancellationToken cancellationToken)
     {
         return await _context.Houses
+            .Include(x => x.Boxes)
             .PaginationAsync(paginationParams, cancellationToken);
     }
 

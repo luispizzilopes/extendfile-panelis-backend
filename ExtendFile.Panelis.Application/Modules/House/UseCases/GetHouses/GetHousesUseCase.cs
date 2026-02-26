@@ -25,7 +25,15 @@ public class GetHousesUseCase
             Id = house.Id.Value,
             Name = house.Name,
             CreatedAt = house.CreatedAt,
-            UpdatedAt = house.UpdatedAt
+            UpdatedAt = house.UpdatedAt,
+            Boxes = house.Boxes.Select(x => new BoxDto
+            {
+                Id = x.Id.Value, 
+                Name = x.Name, 
+                CreatedAt = x.CreatedAt, 
+                UpdatedAt = x.UpdatedAt, 
+                HouseId = house.Id.Value 
+            }).ToList()
         }).ToList();
 
         return new PaginedResult<HouseDto>

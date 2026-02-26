@@ -26,7 +26,7 @@ public class CreateHouseUseCase
             Id = house.Id.Value,
             Name = house.Name,
             CreatedAt = house.CreatedAt,
-            UpdatedAt = house.UpdatedAt
+            UpdatedAt = house.UpdatedAt,
         };
     }
 }
