@@ -14,7 +14,7 @@ public static class ActionResultExtension
     
     public static IActionResult ToActionResult<T>(this ErrorOr<T> result, ControllerBase controller)
     {
-        if (result.Value is null)
+        if (result.Value is null && result.IsError == false) 
             return controller.NoContent();
         
         if (!result.IsError)

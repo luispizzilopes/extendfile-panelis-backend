@@ -1,4 +1,5 @@
-using ExtendFile.Panelis.Application.Behavior;
+using ExtendFile.Panelis.Application.Behaviors;
+using ExtendFile.Panelis.CrossCutting.IoC.Application.UseCases;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ public static class Application
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
         
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
+        services.AddUseCasesDependencyInjection();
     }
 }

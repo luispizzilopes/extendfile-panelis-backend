@@ -10,9 +10,4 @@
       <ProjectReference Include="..\ExtendFile.Panelis.BuildingBlocks\ExtendFile.Panelis.BuildingBlocks.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Interfaces\Repositories\" />
-      <Folder Include="Interfaces\UnitOfWork\" />
-    </ItemGroup>
-
 </Project>

@@ -1,6 +1,6 @@
-using ExtendFile.Panelis.Infrastructure.Context;
-using ExtendFile.Panelis.Infrastructure.Interceptor;
-using Microsoft.EntityFrameworkCore;
+using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Context;
+using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Repositories;
+using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.UnitOfWork;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,17 +10,8 @@ public static class Infrastructure
 {
     public static void AddInfrastructureDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<DomainEventsPublishInterceptor>();
-        
-        string? connectionString = configuration.GetConnectionString("DefaultConnection");
-        if (string.IsNullOrEmpty(connectionString))
-            connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
-        
-        services.AddDbContext<AppDbContext>((serviceProvider, options) =>
-        {
-            var interceptor = serviceProvider.GetRequiredService<DomainEventsPublishInterceptor>();
-            options.UseNpgsql(connectionString)
-                .AddInterceptors(interceptor);
-        });
+        services.AddAppDbContextDependencyInjection(configuration);
+        services.AddRepositoriesDependencyInjection();
+        services.AddUnitOfWorkDependencyInjection();
     }
 }

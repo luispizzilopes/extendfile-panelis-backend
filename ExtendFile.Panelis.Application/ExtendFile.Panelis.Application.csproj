@@ -16,4 +16,15 @@
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Modules\Cat\Commands\" />
+      <Folder Include="Modules\Cat\Events\" />
+      <Folder Include="Modules\Cat\Queries\" />
+      <Folder Include="Modules\Cat\Requests\" />
+      <Folder Include="Modules\Cat\Responses\" />
+      <Folder Include="Modules\Cat\UseCases\" />
+      <Folder Include="Modules\House\Commands\" />
+      <Folder Include="Modules\House\Events\" />
+    </ItemGroup>
+
 </Project>

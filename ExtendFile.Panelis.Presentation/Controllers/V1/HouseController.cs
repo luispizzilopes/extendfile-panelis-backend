@@ -1,0 +1,146 @@
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ExtendFile.Panelis.Application.Modules.House.Requests.CreateHouse;
+using ExtendFile.Panelis.Application.Modules.House.Requests.UpdateHouse;
+using ExtendFile.Panelis.Application.Modules.House.Requests.DeleteHouse;
+using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouseById;
+using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouses;
+using ExtendFile.Panelis.Application.Modules.House.Queries.GetHouseById;
+using ExtendFile.Panelis.Application.Modules.House.Queries.GetHouses;
+using ExtendFile.Panelis.Application.Modules.House.Queries.GetAllHouses;
+using ExtendFile.Panelis.Application.Modules.House.Commands.CreateHouse;
+using ExtendFile.Panelis.Application.Modules.House.Commands.UpdateHouse;
+using ExtendFile.Panelis.Application.Modules.House.Commands.DeleteHouse;
+using ExtendFile.Panelis.Application.Modules.House.Responses;
+using ExtendFile.Panelis.Application.Modules.House.Responses.DeleteHouse;
+using ExtendFile.Panelis.BuildingBlocks.Pagination;
+using ExtendFile.Panelis.Presentation.Extensions;
+
+namespace ExtendFile.Panelis.Presentation.Controllers.V1;
+
+/// <summary>
+/// Controller para operações de Casas/Prédios
+/// </summary>
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
+[ApiController]
+public class HouseController : ControllerBase
+{
+    private readonly IMediator _mediator;
+    
+    public HouseController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
+    /// <summary>
+    /// Obtém casa/prédio por ID
+    /// </summary>
+    /// <param name="id">ID da casa/prédio</param>
+    /// <returns>Retorna os dados da casa/prédio</returns>
+    [HttpGet("{id}")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(HouseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var request = new GetHouseByIdRequest { Id = id };
+        var query = new GetHouseByIdQuery(request);
+        var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Obtém lista paginada de casas/prédios
+    /// </summary>
+    /// <param name="paginationParams">Parâmetros de paginação</param>
+    /// <returns>Retorna lista paginada de casas/prédios</returns>
+    [HttpGet]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(PaginedResult<HouseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetHouses(
+        [FromQuery] PaginationParams paginationParams)
+    {
+        var request = new GetHousesRequest(paginationParams);
+        var query = new GetHousesQuery(request);
+        var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Obtém todas as casas/prédios
+    /// </summary>
+    /// <returns>Retorna lista de todas as casas/prédios</returns>
+    [HttpGet("all")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(IEnumerable<HouseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetAllHouses()
+    {
+        var query = new GetAllHousesQuery();
+        var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Cria uma nova casa/prédio
+    /// </summary>
+    /// <param name="request">Dados da casa/prédio a ser criada</param>
+    /// <returns>Retorna os dados da casa/prédio criada</returns>
+    [HttpPost]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(HouseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> CreateHouse([FromBody] CreateHouseRequest request)
+    {
+        var command = new CreateHouseCommand(request);
+        var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Atualiza uma casa/prédio existente
+    /// </summary>
+    /// <param name="id">ID da casa/prédio</param>
+    /// <param name="request">Dados da casa/prédio a ser atualizada</param>
+    /// <returns>Retorna os dados da casa/prédio atualizada</returns>
+    [HttpPut]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(HouseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateHouse([FromBody] UpdateHouseRequest request)
+    {
+        var command = new UpdateHouseCommand(request);
+        var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Exclui uma casa/prédio existente
+    /// </summary>
+    /// <param name="id">ID da casa/prédio</param>
+    /// <returns>Retorna sucesso da operação</returns>
+    [HttpDelete("{id}")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(DeleteHouseResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteHouse(Guid id)
+    {
+        var request = new DeleteHouseRequest { Id = id };
+        var command = new DeleteHouseCommand(request);
+        var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+}

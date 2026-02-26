@@ -47,10 +47,10 @@ public class Box : Entity<BoxId>
     public void AddCat(CatId catId)
     {
         if (_catIds.Count >= MaxQuantity)
-            throw new DomainException($"Box already reached the maximum capacity of {MaxQuantity} cats.");
+            throw new DomainException($"O box já atingiu a capacidade máxima de {MaxQuantity} gatos.");
 
         if (_catIds.Contains(catId))
-            throw new DomainException("Cat is already in this box.");
+            throw new DomainException("O gato já está neste box.");
 
         _catIds.Add(catId);
     }
@@ -58,7 +58,7 @@ public class Box : Entity<BoxId>
     public void RemoveCat(CatId catId)
     {
         if (!_catIds.Contains(catId))
-            throw new DomainException("Cat not found in this box.");
+            throw new DomainException("Gato não encontrado neste box.");
 
         _catIds.Remove(catId);
     }
