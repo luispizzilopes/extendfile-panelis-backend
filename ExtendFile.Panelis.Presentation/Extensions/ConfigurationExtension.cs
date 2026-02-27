@@ -15,7 +15,7 @@ public static class ConfigurationExtension
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddSwaggerConfiguration(configurationManager);
-      
+        
         services.AddInfrastructureDependencyInjection(configurationManager);
         services.AddApplicationDependencyInjection(configurationManager);
         

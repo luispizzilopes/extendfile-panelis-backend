@@ -2,11 +2,17 @@ using ExtendFile.Panelis.Application.Modules.House.UseCases.CreateBox;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.CreateHouse;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.DeleteBox;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.DeleteHouse;
-using ExtendFile.Panelis.Application.Modules.House.UseCases.GetAllHouses;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.GetHouseById;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.GetHouses;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.UpdateBox;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.UpdateHouse;
+using ExtendFile.Panelis.Application.Modules.Cat.UseCases.CreateCat;
+using ExtendFile.Panelis.Application.Modules.Cat.UseCases.UpdateCat;
+using ExtendFile.Panelis.Application.Modules.Cat.UseCases.DeleteCat;
+using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatById;
+using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCats;
+using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatsByBoxId;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.Login;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtendFile.Panelis.CrossCutting.IoC.Application.UseCases;
@@ -15,7 +21,6 @@ public static class UseCasesDependencyInjection
 {
     public static void AddUseCasesDependencyInjection(this IServiceCollection services)
     {
-        services.AddScoped<GetAllHousesUseCase>();
         services.AddScoped<GetHouseByIdUseCase>();
         services.AddScoped<GetHousesUseCase>();
         services.AddScoped<CreateHouseUseCase>();
@@ -25,5 +30,14 @@ public static class UseCasesDependencyInjection
         services.AddScoped<CreateBoxUseCase>();
         services.AddScoped<UpdateBoxUseCase>();
         services.AddScoped<DeleteBoxUseCase>();
+        
+        services.AddScoped<GetCatByIdUseCase>();
+        services.AddScoped<GetCatsUseCase>();
+        services.AddScoped<GetCatsByBoxIdUseCase>();
+        services.AddScoped<CreateCatUseCase>();
+        services.AddScoped<UpdateCatUseCase>();
+        services.AddScoped<DeleteCatUseCase>();
+
+        services.AddScoped<LoginUseCase>(); 
     }
 }

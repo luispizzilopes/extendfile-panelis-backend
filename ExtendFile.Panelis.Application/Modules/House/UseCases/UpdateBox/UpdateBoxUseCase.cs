@@ -27,7 +27,7 @@ public class UpdateBoxUseCase
         if (box is null)
             return Error.NotFound(description: "Box não encontrado");
 
-        box.Update(request.Name);
+        box.Update(request.Name, request.MaxQuantity);
         
         await _unitOfWork.HouseRepository.UpdateHouseAsync(house, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);

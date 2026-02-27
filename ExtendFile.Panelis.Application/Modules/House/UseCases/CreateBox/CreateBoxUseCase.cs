@@ -24,7 +24,7 @@ public class CreateBoxUseCase
         if (house is null)
             return Error.NotFound(description: "Casa/Prédio não encontrada");
 
-        var box = Box.Create(request.Name); 
+        var box = Box.Create(request.Name, request.MaxQuantity); 
         house.AddBox(box);
         
         await _unitOfWork.HouseRepository.UpdateHouseAsync(house, cancellationToken);

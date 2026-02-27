@@ -10,7 +10,6 @@ using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouseById;
 using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouses;
 using ExtendFile.Panelis.Application.Modules.House.Queries.GetHouseById;
 using ExtendFile.Panelis.Application.Modules.House.Queries.GetHouses;
-using ExtendFile.Panelis.Application.Modules.House.Queries.GetAllHouses;
 using ExtendFile.Panelis.Application.Modules.House.Commands.CreateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Commands.UpdateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Commands.DeleteHouse;
@@ -22,12 +21,15 @@ using ExtendFile.Panelis.Application.Modules.House.Responses.DeleteHouse;
 using ExtendFile.Panelis.Application.Modules.House.Responses.DeleteBox;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Presentation.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ExtendFile.Panelis.Presentation.Controllers.V1;
 
 /// <summary>
 /// Controller para operações de Casas/Prédios
 /// </summary>
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]
@@ -74,22 +76,6 @@ public class HouseController : ControllerBase
     {
         var request = new GetHousesRequest(paginationParams);
         var query = new GetHousesQuery(request);
-        var result = await _mediator.Send(query);
-        return result.ToActionResult(this);
-    }
-    
-    /// <summary>
-    /// Obtém todas as casas/prédios
-    /// </summary>
-    /// <returns>Retorna lista de todas as casas/prédios</returns>
-    [HttpGet("all")]
-    [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<HouseDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetAllHouses()
-    {
-        var query = new GetAllHousesQuery();
         var result = await _mediator.Send(query);
         return result.ToActionResult(this);
     }

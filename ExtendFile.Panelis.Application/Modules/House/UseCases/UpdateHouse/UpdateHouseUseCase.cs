@@ -22,7 +22,7 @@ public class UpdateHouseUseCase
         if (house is null)
             return Error.NotFound(description: "Casa/Prédio não encontrada");
 
-        house.Update(request.Name);
+        house.Update(request.Name, request.Description);
         
         await _unitOfWork.HouseRepository.UpdateHouseAsync(house, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
@@ -31,6 +31,7 @@ public class UpdateHouseUseCase
         {
             Id = house.Id.Value,
             Name = house.Name,
+            Description = house.Description,
             CreatedAt = house.CreatedAt,
             UpdatedAt = house.UpdatedAt!.Value
         };

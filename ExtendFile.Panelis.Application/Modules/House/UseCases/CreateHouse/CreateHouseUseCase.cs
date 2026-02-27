@@ -16,7 +16,7 @@ public class CreateHouseUseCase
 
     public async Task<ErrorOr<HouseDto>> ExecuteAsync(CreateHouseRequest request, CancellationToken cancellationToken = default)
     {
-        var house = Domain.Modules.House.Aggregates.House.Create(request.Name);
+        var house = Domain.Modules.House.Aggregates.House.Create(request.Name, request.Description);
         
         await _unitOfWork.HouseRepository.CreateHouseAsync(house, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
@@ -25,6 +25,7 @@ public class CreateHouseUseCase
         {
             Id = house.Id.Value,
             Name = house.Name,
+            Description = house.Description,
             CreatedAt = house.CreatedAt,
             UpdatedAt = house.UpdatedAt,
         };

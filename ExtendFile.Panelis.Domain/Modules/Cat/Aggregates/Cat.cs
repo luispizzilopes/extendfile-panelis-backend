@@ -15,6 +15,7 @@ public class Cat : AggregateRoot<CatId>
     public BoxId BoxId { get; private set; } = null!;
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
+    public bool IsActive { get; set; }
 
     public Cat() { }
 
@@ -33,8 +34,9 @@ public class Cat : AggregateRoot<CatId>
         Weight = weight;
         Sex = sex;
         BoxId = boxId;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
+        IsActive = true;
     }
 
     public static Cat Create(
@@ -63,19 +65,21 @@ public class Cat : AggregateRoot<CatId>
         string hash,
         int age,
         decimal weight,
-        CatSex sex)
+        CatSex sex,
+        bool isActive)
     {
         Name = name;
         Hash = hash;
         Age = age;
         Weight = weight;
         Sex = sex;
-        UpdatedAt = DateTime.Now;
+        UpdatedAt = DateTime.UtcNow;
+        IsActive = isActive;
     }
 
     public void MoveToBox(BoxId boxId)
     {
         BoxId = boxId;
-        UpdatedAt = DateTime.Now;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

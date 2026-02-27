@@ -19,6 +19,10 @@ public class HouseConfiguration : IEntityTypeConfiguration<Domain.Modules.House.
         builder.Property(h => h.Name)
             .HasMaxLength(100)
             .IsRequired();
+        
+        builder.Property(h => h.Description)
+            .HasMaxLength(500)
+            .IsRequired();
 
         builder.Property(h => h.CreatedAt).IsRequired();
         builder.Property(h => h.UpdatedAt);

@@ -17,6 +17,9 @@ public class BoxConfiguration : IEntityTypeConfiguration<Domain.Modules.House.En
             .HasConversion(id => id.Value, value => BoxId.Create(value))
             .IsRequired();
 
+        builder.Property(b => b.MaxQuantity)
+            .IsRequired();
+
         builder.Property(b => b.Name)
             .HasMaxLength(100)
             .IsRequired();
@@ -27,16 +30,5 @@ public class BoxConfiguration : IEntityTypeConfiguration<Domain.Modules.House.En
         builder.Property<HouseId>("HouseId")
             .HasConversion(id => id.Value, value => HouseId.Create(value))
             .IsRequired();
-        
-        builder.OwnsMany(b => b.CatIds, catId =>
-        {
-            catId.ToTable("BoxesCats");
-
-            catId.WithOwner().HasForeignKey("BoxId");
-
-            catId.Property(c => c.Value)
-                .HasColumnName("CatId")
-                .IsRequired();
-        });
     }
 }

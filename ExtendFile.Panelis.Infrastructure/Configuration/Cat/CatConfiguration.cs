@@ -41,5 +41,8 @@ public class CatConfiguration : IEntityTypeConfiguration<Domain.Modules.Cat.Aggr
 
         builder.Property(c => c.CreatedAt).IsRequired();
         builder.Property(c => c.UpdatedAt);
+        
+        builder.Property(c => c.IsActive)
+            .IsRequired();
     }
 }

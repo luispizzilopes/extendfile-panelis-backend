@@ -38,9 +38,17 @@ public class CatRepository : ICatRepository
             .PaginationAsync(paginationParams, cancellationToken);
     }
 
-    public async Task<PaginedResult<Aggregates.Cat>> GetCatsAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<PaginedResult<Aggregates.Cat>> GetCatsAsync(
+        PaginationParams paginationParams, 
+        string? search,
+        CancellationToken cancellationToken)
     {
-        return await _context.Cats.PaginationAsync(paginationParams, cancellationToken);
+        var query = _context.Cats.AsQueryable();
+        
+        if (!string.IsNullOrEmpty(search))
+            query = query.Where(x => x.Name.Contains(search));
+        
+        return await query.PaginationAsync(paginationParams, cancellationToken);
     }
 
     public async Task<IEnumerable<Aggregates.Cat>> GetAllCatsAsync(CancellationToken cancellationToken)
@@ -48,6 +56,25 @@ public class CatRepository : ICatRepository
         return await _context.Cats
             .AsNoTracking()
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<int> GetCatsCountByBoxAsync(Guid boxId, CancellationToken cancellationToken)
+    {
+        return await _context.Cats
+            .Where(x => x.BoxId == BoxId.Create(boxId))
+            .CountAsync(cancellationToken);
+    }
+    
+    public async Task<Dictionary<Guid, int>> GetCatsCountByBoxesAsync(IEnumerable<Guid>? boxIds, CancellationToken cancellationToken)
+    {
+        if (boxIds is null)
+            return new Dictionary<Guid, int>();
+        
+        return await _context.Cats
+            .Where(c => boxIds.Contains(c.BoxId.Value))
+            .GroupBy(c => c.BoxId.Value)
+            .Select(g => new { BoxId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.BoxId, x => x.Count, cancellationToken);
     }
 
     public async Task CreateCatAsync(Aggregates.Cat cat, CancellationToken cancellationToken)

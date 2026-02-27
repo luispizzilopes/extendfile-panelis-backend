@@ -43,6 +43,14 @@ public class HouseRepository : IHouseRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<Domain.Modules.House.Aggregates.House?> GetHouseByBoxIdAsync(Guid boxId, CancellationToken cancellationToken)
+    {
+        return await _context.Houses
+            .Include(x => x.Boxes)
+            .Where(x => x.Boxes.Any(b => b.Id == BoxId.Create(boxId)))
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task CreateHouseAsync(Domain.Modules.House.Aggregates.House house, CancellationToken cancellationToken)
     {
         try

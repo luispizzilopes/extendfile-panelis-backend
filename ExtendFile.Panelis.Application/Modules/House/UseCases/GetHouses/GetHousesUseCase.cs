@@ -3,7 +3,6 @@ using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouses;
 using ExtendFile.Panelis.Application.Modules.House.Responses;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Interfaces.UnitOfWork;
-using ExtendFile.Panelis.Domain.Modules.House.Aggregates;
 
 namespace ExtendFile.Panelis.Application.Modules.House.UseCases.GetHouses;
 
@@ -20,21 +19,9 @@ public class GetHousesUseCase
     {
         var result = await _unitOfWork.HouseRepository.GetHousesAsync(request.PaginationParams, cancellationToken);
 
-        var data = result.Data?.Select(house => new HouseDto
-        {
-            Id = house.Id.Value,
-            Name = house.Name,
-            CreatedAt = house.CreatedAt,
-            UpdatedAt = house.UpdatedAt,
-            Boxes = house.Boxes.Select(x => new BoxDto
-            {
-                Id = x.Id.Value, 
-                Name = x.Name, 
-                CreatedAt = x.CreatedAt, 
-                UpdatedAt = x.UpdatedAt, 
-                HouseId = house.Id.Value 
-            }).ToList()
-        }).ToList();
+        var data = MapToDto(result.Data);
+
+        await EnrichWithCatQuantitiesAsync(data, cancellationToken);
 
         return new PaginedResult<HouseDto>
         {
@@ -43,5 +30,45 @@ public class GetHousesUseCase
             PageSize = result.PageSize,
             TotalRecords = result.TotalRecords
         };
+    }
+
+    private static List<HouseDto>? MapToDto(IEnumerable<Domain.Modules.House.Aggregates.House>? houses) =>
+        houses?.Select(house => new HouseDto
+        {
+            Id = house.Id.Value,
+            Name = house.Name,
+            Description = house.Description,
+            CreatedAt = house.CreatedAt,
+            UpdatedAt = house.UpdatedAt,
+            Boxes = house.Boxes?.Select(box => new BoxDto
+            {
+                Id = box.Id.Value,
+                Name = box.Name,
+                CreatedAt = box.CreatedAt,
+                UpdatedAt = box.UpdatedAt,
+                HouseId = house.Id.Value,
+                MaxQuantity = box.MaxQuantity
+            }).ToList()
+        }).ToList();
+
+    private async Task EnrichWithCatQuantitiesAsync(List<HouseDto>? data, CancellationToken cancellationToken)
+    {
+        if (data is not { Count: > 0 }) return;
+
+        var boxes = data
+            .SelectMany(h => h.Boxes ?? [])
+            .ToList();
+
+        if (boxes.Count == 0) return;
+
+        var countTasks = boxes.ToDictionary(
+            box => box.Id,
+            box => _unitOfWork.CatRepository.GetCatsCountByBoxAsync(box.Id, cancellationToken)
+        );
+
+        await Task.WhenAll(countTasks.Values);
+
+        foreach (var box in boxes)
+            box.Quantity = await countTasks[box.Id];
     }
 }

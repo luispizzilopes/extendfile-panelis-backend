@@ -7,4 +7,6 @@ public class BoxDto
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public Guid HouseId { get; set; }
+    public int? MaxQuantity { get; set; }
+    public int? Quantity { get; set; }
 }

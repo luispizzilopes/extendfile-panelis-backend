@@ -11,55 +11,36 @@ public class Box : Entity<BoxId>
     public string Name { get; private set; } = string.Empty;
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
-    private int MaxQuantity => 10;
-    
-    private readonly List<CatId> _catIds = [];
-    public IReadOnlyList<CatId> CatIds => _catIds.AsReadOnly();
+    public int MaxQuantity { get; private set; }
 
     public Box() { }
 
     public Box(
         BoxId id,
-        string name) : base(id)
+        string name,
+        int maxQuantity) : base(id)
     {
         Name = name;
+        MaxQuantity = maxQuantity;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public static Box Create(string name)
+    public static Box Create(string name, int maxQuantity)
     {
         var box = new Box(
             BoxId.CreateIdentifier(),
-            name
+            name,
+            maxQuantity
         );
 
         return box;
     }
 
-    public void Update(string name)
+    public void Update(string name, int maxQuantity)
     {
         Name = name;
+        MaxQuantity = maxQuantity;
         UpdatedAt = DateTime.UtcNow;
-    }
-    
-    
-    public void AddCat(CatId catId)
-    {
-        if (_catIds.Count >= MaxQuantity)
-            throw new DomainException($"O box já atingiu a capacidade máxima de {MaxQuantity} gatos.");
-
-        if (_catIds.Contains(catId))
-            throw new DomainException("O gato já está neste box.");
-
-        _catIds.Add(catId);
-    }
-
-    public void RemoveCat(CatId catId)
-    {
-        if (!_catIds.Contains(catId))
-            throw new DomainException("Gato não encontrado neste box.");
-
-        _catIds.Remove(catId);
     }
 }
