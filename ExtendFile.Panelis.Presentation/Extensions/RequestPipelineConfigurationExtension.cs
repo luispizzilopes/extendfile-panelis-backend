@@ -12,6 +12,13 @@ public static class RequestPipelineConfigurationExtension
             app.ConfigureSwagger();
         }
 
+        app.UseCors(c =>
+        {
+            c.AllowAnyHeader();
+            c.AllowAnyMethod();
+            c.AllowAnyOrigin();
+        });
+        
         app.UseHttpsRedirection();
         app.UseAuthConfiguration();
         app.UseMiddleware<ErrorMiddleware>();

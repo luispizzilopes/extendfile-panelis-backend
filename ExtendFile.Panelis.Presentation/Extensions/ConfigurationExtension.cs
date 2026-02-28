@@ -20,5 +20,7 @@ public static class ConfigurationExtension
         services.AddApplicationDependencyInjection(configurationManager);
         
         services.AddCustomLogger(configurationManager);
+
+        services.AddCors(); 
     }
 }
