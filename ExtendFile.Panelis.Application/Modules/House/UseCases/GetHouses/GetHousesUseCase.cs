@@ -61,14 +61,11 @@ public class GetHousesUseCase
 
         if (boxes.Count == 0) return;
 
-        var countTasks = boxes.ToDictionary(
-            box => box.Id,
-            box => _unitOfWork.CatRepository.GetCatsCountByBoxAsync(box.Id, cancellationToken)
-        );
-
-        await Task.WhenAll(countTasks.Values);
-
         foreach (var box in boxes)
-            box.Quantity = await countTasks[box.Id];
+        {
+            box.Quantity = await _unitOfWork
+                .CatRepository
+                .GetCatsCountByBoxAsync(box.Id, cancellationToken);
+        }
     }
 }
