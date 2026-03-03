@@ -43,6 +43,10 @@ public class LoginUseCase
 
         var tokenJwtInformation = _tokenJwtService.CreateTokenUser(user);
         
-        return new UserSessionResponse(user.Id, user.Email, tokenJwtInformation);
+        return new UserSessionResponse(
+            user.Id, 
+            user.Email,
+            user.Name,
+            tokenJwtInformation);
     }
 }
