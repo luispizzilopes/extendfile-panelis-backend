@@ -46,7 +46,7 @@ public class GetCatsUseCase
             Data = catDtos,
             PageNumber = catsResult.PageNumber,
             PageSize = catsResult.PageSize,
-            TotalRecords = catsResult.TotalPages
+            TotalRecords = catsResult.TotalRecords
         };
     }
 }
