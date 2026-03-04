@@ -46,7 +46,7 @@ public class CatRepository : ICatRepository
         var query = _context.Cats.AsQueryable();
         
         if (!string.IsNullOrEmpty(search))
-            query = query.Where(x => x.Name.Contains(search));
+            query = query.Where(x => x.Name.ToLower().Contains(search.ToLower()));
         
         return await query.PaginationAsync(paginationParams, cancellationToken);
     }

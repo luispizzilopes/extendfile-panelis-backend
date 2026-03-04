@@ -23,10 +23,22 @@ public class UpdateCatUseCase
         
         if (cat is null)
         {
-            return Error.NotFound("Cat not found", "Gato não encontrado");
+            return Error.NotFound("Gato não encontrado", "Gato não encontrado");
         }
 
         var boxId = BoxId.Create(request.BoxId);
+        
+        var box = await _unitOfWork.HouseRepository.GetBoxByIdAsync(request.BoxId, cancellationToken);
+        if (box is null)
+            return Error.NotFound("Box não encontrado", "Box não encontrado");
+        
+        var currentCatsCount = await _unitOfWork.CatRepository.GetCatsCountByBoxAsync(request.BoxId, cancellationToken);
+        
+        if (cat.BoxId.Value != request.BoxId)
+            currentCatsCount++;
+        
+        if (currentCatsCount > box.MaxQuantity)
+            return Error.Validation("Box está cheio", $"O box '{box.Name}' já está totalmente ocupado. Capacidade máxima: {box.MaxQuantity}");
         
         cat.Update(
             request.Name,

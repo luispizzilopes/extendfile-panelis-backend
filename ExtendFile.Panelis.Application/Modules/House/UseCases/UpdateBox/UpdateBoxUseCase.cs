@@ -27,6 +27,11 @@ public class UpdateBoxUseCase
         if (box is null)
             return Error.NotFound(description: "Box não encontrado");
 
+        var currentCatsCount = await _unitOfWork.CatRepository.GetCatsCountByBoxAsync(box.Id.Value, cancellationToken);
+        
+        if (request.MaxQuantity < currentCatsCount)
+            return Error.Validation("Capacidade inválida", $"Não é possível diminuir a capacidade para {request.MaxQuantity} pois o box atualmente possui {currentCatsCount} gatos. A capacidade mínima permitida é {currentCatsCount}.");
+
         box.Update(request.Name, request.MaxQuantity);
         
         await _unitOfWork.HouseRepository.UpdateHouseAsync(house, cancellationToken);
