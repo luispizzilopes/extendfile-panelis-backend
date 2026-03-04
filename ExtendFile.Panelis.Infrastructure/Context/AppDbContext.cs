@@ -1,3 +1,4 @@
+using ExtendFile.Panelis.Application.Modules.Dashboard.Models.ReadModel;
 using ExtendFile.Panelis.BuildingBlocks.Common.Interfaces.Events;
 using ExtendFile.Panelis.Domain.Modules.Cat.Aggregates;
 using ExtendFile.Panelis.Domain.Modules.House.Aggregates;
@@ -16,6 +17,9 @@ public class AppDbContext : IdentityDbContext<User>
     public virtual DbSet<House> Houses { get; set; }
     public virtual DbSet<Cat> Cats { get; set; }
     public virtual DbSet<Box> Boxes { get; set; }
+    
+    //Repositories ReadModel
+    public virtual DbSet<DashboardReadModel> Dashboards { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

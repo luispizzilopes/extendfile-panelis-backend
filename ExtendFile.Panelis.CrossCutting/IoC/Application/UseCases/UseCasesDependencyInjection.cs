@@ -12,6 +12,7 @@ using ExtendFile.Panelis.Application.Modules.Cat.UseCases.DeleteCat;
 using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatById;
 using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCats;
 using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatsByBoxId;
+using ExtendFile.Panelis.Application.Modules.Dashboard.UseCases.GetDashboard;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.Login;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,6 +39,8 @@ public static class UseCasesDependencyInjection
         services.AddScoped<UpdateCatUseCase>();
         services.AddScoped<DeleteCatUseCase>();
 
-        services.AddScoped<LoginUseCase>(); 
+        services.AddScoped<LoginUseCase>();
+
+        services.AddScoped<GetDashboardUseCase>(); 
     }
 }

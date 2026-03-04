@@ -23,6 +23,8 @@
       <Folder Include="Modules\Cat\Requests\" />
       <Folder Include="Modules\Cat\Responses\" />
       <Folder Include="Modules\Cat\UseCases\" />
+      <Folder Include="Modules\Dashboard\Queries\GetDashboard\" />
+      <Folder Include="Modules\Dashboard\UseCases\GetDashboard\" />
       <Folder Include="Modules\House\Events\" />
     </ItemGroup>
 

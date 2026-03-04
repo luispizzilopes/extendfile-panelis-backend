@@ -1,8 +1,10 @@
+using ExtendFile.Panelis.Application.Modules.Dashboard.Interfaces.Repositories;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Cat;
 using ExtendFile.Panelis.Domain.Interfaces.UnitOfWork;
 using ExtendFile.Panelis.Infrastructure.Context;
 using ExtendFile.Panelis.Infrastructure.Repositories.Cat;
+using ExtendFile.Panelis.Infrastructure.Repositories.Dashboard;
 using ExtendFile.Panelis.Infrastructure.Repositories.House;
 using Microsoft.Extensions.Logging;
 
@@ -17,6 +19,8 @@ public class UnitOfWork : IUnitOfWork
     
     private CatRepository _catRepository;
     private readonly ILogger<CatRepository> _catLogger;
+    
+    private DashboardReadModelRepository  _dashboardReadModelRepository;
 
     public UnitOfWork(
         AppDbContext context,
@@ -46,6 +50,16 @@ public class UnitOfWork : IUnitOfWork
         set { }
     }
 
+    public IDashboardReadModelRepository DashboardReadModelRepository
+    {
+        get
+        {
+            return _dashboardReadModelRepository =
+                _dashboardReadModelRepository ?? new DashboardReadModelRepository(_context); 
+        }
+        set { }
+    }
+    
     public async Task CommitAsync(CancellationToken cancellationToken)
     {
         await _context.SaveChangesAsync(cancellationToken);
