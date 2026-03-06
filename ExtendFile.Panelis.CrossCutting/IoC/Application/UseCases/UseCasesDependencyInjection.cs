@@ -13,6 +13,10 @@ using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatById;
 using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCats;
 using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Dashboard.UseCases.GetDashboard;
+using ExtendFile.Panelis.Application.Modules.Setting.UseCases.GetSetting;
+using ExtendFile.Panelis.Application.Modules.Setting.UseCases.UpsertSetting;
+using ExtendFile.Panelis.Application.Modules.Test.UseCases.CreateTest;
+using ExtendFile.Panelis.Application.Modules.Test.UseCases.ProcessTest;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.Login;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -41,6 +45,12 @@ public static class UseCasesDependencyInjection
 
         services.AddScoped<LoginUseCase>();
 
-        services.AddScoped<GetDashboardUseCase>(); 
+        services.AddScoped<GetDashboardUseCase>();
+
+        services.AddScoped<CreateTestUseCase>();
+        services.AddScoped<ProcessTestUseCase>();
+
+        services.AddScoped<GetSettingUseCase>();
+        services.AddScoped<UpsertSettingUseCase>();
     }
 }

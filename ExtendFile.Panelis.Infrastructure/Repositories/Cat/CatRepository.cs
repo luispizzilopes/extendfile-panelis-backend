@@ -28,6 +28,22 @@ public class CatRepository : ICatRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<Aggregates.Cat?> GetCatByHashAsync(string hash, CancellationToken cancellationToken)
+    {
+        return await _context.Cats
+            .Where(x => x.Hash == hash)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Aggregates.Cat>> GetCatsByBoxIdAsync(
+        Guid boxId,
+        CancellationToken cancellationToken)
+    {
+        return await _context.Cats
+            .Where(x => x.BoxId == BoxId.Create(boxId) && x.IsActive == true)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<PaginedResult<Aggregates.Cat>> GetCatsByBoxIdAsync(
         PaginationParams paginationParams, 
         Guid boxId, 
@@ -61,7 +77,7 @@ public class CatRepository : ICatRepository
     public async Task<int> GetCatsCountByBoxAsync(Guid boxId, CancellationToken cancellationToken)
     {
         return await _context.Cats
-            .Where(x => x.BoxId == BoxId.Create(boxId))
+            .Where(x => x.BoxId == BoxId.Create(boxId) && x.IsActive == true)
             .CountAsync(cancellationToken);
     }
     

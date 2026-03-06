@@ -8,6 +8,7 @@ public class DashboardConfiguration : IEntityTypeConfiguration<DashboardReadMode
 {
     public void Configure(EntityTypeBuilder<DashboardReadModel> builder)
     {
+        builder.ToTable("vw_dashboard"); 
         builder.ToView("vw_dashboard");
         builder.HasNoKey();
         builder.Metadata.SetIsTableExcludedFromMigrations(true);

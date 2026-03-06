@@ -26,7 +26,7 @@ public class UpdateCatUseCase
             return Error.NotFound("Gato não encontrado", "Gato não encontrado");
         }
 
-        var boxId = BoxId.Create(request.BoxId);
+        var boxId = BoxId.Create(request.IsActive ? request.BoxId : Guid.Empty);
         
         var box = await _unitOfWork.HouseRepository.GetBoxByIdAsync(request.BoxId, cancellationToken);
         if (box is null)

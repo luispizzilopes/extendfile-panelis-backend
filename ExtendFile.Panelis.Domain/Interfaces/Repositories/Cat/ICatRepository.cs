@@ -5,7 +5,9 @@ namespace ExtendFile.Panelis.Domain.Interfaces.Repositories.Cat;
 public interface ICatRepository
 {
     Task<Modules.Cat.Aggregates.Cat?> GetCatByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Modules.Cat.Aggregates.Cat?> GetCatByHashAsync(string hash, CancellationToken cancellationToken);
     Task<PaginedResult<Modules.Cat.Aggregates.Cat>> GetCatsByBoxIdAsync(PaginationParams paginationParams, Guid boxId, CancellationToken cancellationToken);
+    Task<IEnumerable<Modules.Cat.Aggregates.Cat>> GetCatsByBoxIdAsync(Guid boxId, CancellationToken cancellationToken);
     Task<PaginedResult<Modules.Cat.Aggregates.Cat>> GetCatsAsync(
         PaginationParams paginationParams, 
         string? search,

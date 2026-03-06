@@ -3,6 +3,9 @@ using ExtendFile.Panelis.BuildingBlocks.Common.Interfaces.Events;
 using ExtendFile.Panelis.Domain.Modules.Cat.Aggregates;
 using ExtendFile.Panelis.Domain.Modules.House.Aggregates;
 using ExtendFile.Panelis.Domain.Modules.House.Entities;
+using ExtendFile.Panelis.Domain.Modules.Setting.Aggregates;
+using ExtendFile.Panelis.Domain.Modules.Test.Aggregates;
+using ExtendFile.Panelis.Domain.Modules.Test.Entities;
 using ExtendFile.Panelis.Domain.Modules.User.Entities;
 using ExtendFile.Panelis.Infrastructure.Interceptor;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -17,6 +20,9 @@ public class AppDbContext : IdentityDbContext<User>
     public virtual DbSet<House> Houses { get; set; }
     public virtual DbSet<Cat> Cats { get; set; }
     public virtual DbSet<Box> Boxes { get; set; }
+    public virtual DbSet<Test> Tests { get; set; }
+    public virtual DbSet<TestLine> TestLines { get; set; }
+    public virtual DbSet<Setting> Settings { get; set; }
     
     //Repositories ReadModel
     public virtual DbSet<DashboardReadModel> Dashboards { get; set; }
