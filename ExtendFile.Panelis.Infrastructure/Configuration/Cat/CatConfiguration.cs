@@ -25,7 +25,7 @@ public class CatConfiguration : IEntityTypeConfiguration<Domain.Modules.Cat.Aggr
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(c => c.Age).IsRequired();
+        builder.Property(c => c.DateOfBirth).IsRequired();
 
         builder.Property(c => c.Weight)
             .HasPrecision(5, 2)
@@ -34,6 +34,9 @@ public class CatConfiguration : IEntityTypeConfiguration<Domain.Modules.Cat.Aggr
         builder.Property(c => c.Sex)
             .HasConversion<int>()
             .IsRequired();
+
+        builder.Property(c => c.Location)
+            .HasConversion<int>();
 
         builder.Property(c => c.BoxId)
             .HasConversion(id => id.Value, value => BoxId.Create(value))

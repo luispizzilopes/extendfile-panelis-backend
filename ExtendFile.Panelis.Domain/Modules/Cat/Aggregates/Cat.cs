@@ -9,9 +9,10 @@ public class Cat : AggregateRoot<CatId>
 {
     public string Name { get; private set; } = string.Empty;
     public string Hash { get; private set; } = string.Empty;
-    public int Age { get; private set; }
+    public DateTime DateOfBirth { get; private set; }
     public decimal Weight { get; private set; }
     public CatSex Sex { get; private set; }
+    public CatLocation Location { get; private set; }
     public BoxId BoxId { get; private set; } = null!;
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
@@ -23,16 +24,18 @@ public class Cat : AggregateRoot<CatId>
         CatId id,
         string name,
         string hash,
-        int age,
+        DateTime dateOfBirth,
         decimal weight,
         CatSex sex,
+        CatLocation location,
         BoxId boxId) : base(id)
     {
         Name = name;
         Hash = hash;
-        Age = age;
+        DateOfBirth = dateOfBirth;
         Weight = weight;
         Sex = sex;
+        Location = location;
         BoxId = boxId;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
@@ -42,18 +45,20 @@ public class Cat : AggregateRoot<CatId>
     public static Cat Create(
         string name,
         string hash,
-        int age,
+        DateTime dateOfBirth,
         decimal weight,
         CatSex sex,
+        CatLocation location,
         BoxId boxId)
     {
         var cat = new Cat(
             CatId.CreateIdentifier(),
             name,
             hash,
-            age,
+            dateOfBirth,
             weight,
             sex,
+            location,
             boxId
         );
 
@@ -63,16 +68,18 @@ public class Cat : AggregateRoot<CatId>
     public void Update(
         string name,
         string hash,
-        int age,
+        DateTime dateOfBirth,
         decimal weight,
         CatSex sex,
+        CatLocation location,
         bool isActive)
     {
         Name = name;
         Hash = hash;
-        Age = age;
+        DateOfBirth = dateOfBirth;
         Weight = weight;
         Sex = sex;
+        Location = location;
         UpdatedAt = DateTime.UtcNow;
         IsActive = isActive;
     }

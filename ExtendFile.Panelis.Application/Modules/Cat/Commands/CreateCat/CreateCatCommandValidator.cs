@@ -19,11 +19,13 @@ public class CreateCatCommandValidator : AbstractValidator<CreateCatCommand>
             .MaximumLength(500)
             .WithMessage("Hash não pode exceder 500 caracteres");
 
-        RuleFor(x => x.Request.Age)
-            .GreaterThan(0)
-            .WithMessage("Idade deve ser maior que 0")
-            .LessThan(30)
-            .WithMessage("Idade não pode exceder 30 anos");
+        RuleFor(x => x.Request.DateOfBirth)
+            .NotEmpty()
+            .WithMessage("Data de nascimento é obrigatória")
+            .LessThan(DateTime.Now)
+            .WithMessage("Data de nascimento não pode ser futura")
+            .GreaterThan(DateTime.Now.AddYears(-30))
+            .WithMessage("Data de nascimento não pode ser superior a 30 anos");
 
         RuleFor(x => x.Request.Weight)
             .GreaterThan(0)

@@ -18,21 +18,19 @@ public class CreateCatUseCase
     public async Task<ErrorOr<CatDto>> ExecuteAsync(CreateCatRequest request, CancellationToken cancellationToken = default)
     {
         var boxId = BoxId.Create(request.BoxId);
-        
         var box = await _unitOfWork.HouseRepository.GetBoxByIdAsync(request.BoxId, cancellationToken);
-        if (box is null)
-            return Error.NotFound("Box não encontrado", "Box não encontrado");
         
         var currentCatsCount = await _unitOfWork.CatRepository.GetCatsCountByBoxAsync(request.BoxId, cancellationToken);
-        if (currentCatsCount >= box.MaxQuantity)
+        if (box is not null && currentCatsCount >= box.MaxQuantity)
             return Error.Validation("Box está cheio", $"O box '{box.Name}' já está totalmente ocupado. Capacidade máxima: {box.MaxQuantity}");
         
         var cat = Domain.Modules.Cat.Aggregates.Cat.Create(
             request.Name,
             request.Hash,
-            request.Age,
+            request.DateOfBirth,
             request.Weight,
             request.Sex,
+            request.Location,
             boxId
         );
         
@@ -44,9 +42,10 @@ public class CreateCatUseCase
             Id = cat.Id.Value,
             Name = cat.Name,
             Hash = cat.Hash,
-            Age = cat.Age,
+            DateOfBirth = cat.DateOfBirth,
             Weight = cat.Weight,
             Sex = cat.Sex,
+            Location = cat.Location,
             BoxId = cat.BoxId.Value,
             CreatedAt = cat.CreatedAt,
             UpdatedAt = cat.UpdatedAt,
