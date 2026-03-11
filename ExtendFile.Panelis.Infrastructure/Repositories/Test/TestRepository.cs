@@ -1,5 +1,6 @@
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Test;
+using ExtendFile.Panelis.Domain.Modules.House.Entities;
 using ExtendFile.Panelis.Domain.Modules.House.ValueObject;
 using ExtendFile.Panelis.Domain.Modules.Test.Entities;
 using ExtendFile.Panelis.Domain.Modules.Test.ValueObject;
@@ -26,8 +27,8 @@ public class TestRepository : ITestRepository
         try
         {
             return await _context.Tests
-                .Where(x => x.BoxId.Value == boxId)
-                .Include(x => x.Lines)
+                .Where(x => x.BoxId == BoxId.Create(boxId))
+                .OrderByDescending(x => x.TestDate)
                 .PaginationAsync(paginationParams, cancellationToken);
         }
         catch (Exception ex)
@@ -37,19 +38,37 @@ public class TestRepository : ITestRepository
         }
     }
 
-    public async Task<IEnumerable<TestLine>> GetTestLinesByTestIdAsync(Guid testId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TestLine>?> GetTestLinesByTestIdAsync(Guid testId, CancellationToken cancellationToken)
     {
         try
         {
-            return await _context.TestLines
-                .Where(x => EF.Property<Guid>(x, "TestId") == testId)
+            var test = await _context.Tests
+                .Where(x => x.Id == TestId.Create(testId))
+                .Include(x => x.Lines)
+                .FirstOrDefaultAsync(cancellationToken);
+            
+            return test?.Lines
                 .OrderBy(x => x.Position)
-                .AsNoTracking()
-                .ToListAsync(cancellationToken);
+                .ToList();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ocorreu um erro ao buscar as linhas do teste. Erro: {Message}", ex.Message);
+            throw;
+        }
+    }
+
+    public async Task<Domain.Modules.Test.Aggregates.Test?> GetTestByIdAsync(Guid testId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await _context.Tests
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == TestId.Create(testId), cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro ao buscar o teste pelo id '{TestId}'. Erro: {Message}", testId, ex.Message);
             throw;
         }
     }
@@ -122,5 +141,20 @@ public class TestRepository : ITestRepository
             _logger.LogError(ex, "Ocorreu um erro ao excluir o teste com id {TestId}. Erro: {Message}", testId, ex.Message);
             throw;
         }
+    }
+
+    public async Task<bool> AnyTestByBoxIdAsync(Guid boxId, CancellationToken cancellationToken)
+    {
+        return await _context.Tests
+            .Where(x => x.BoxId == BoxId.Create(boxId))
+            .AnyAsync(cancellationToken);
+    }
+
+    public async Task<Domain.Modules.Test.Aggregates.Test?> GetLastTestOrDefaultByBoxIdAsync(Guid boxId, CancellationToken cancellationToken)
+    {
+        return await _context.Tests
+            .Where(x => x.BoxId == BoxId.Create(boxId))
+            .OrderByDescending(x => x.TestDate)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

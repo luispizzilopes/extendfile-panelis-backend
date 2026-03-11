@@ -17,6 +17,8 @@ using ExtendFile.Panelis.Application.Modules.Setting.UseCases.GetSetting;
 using ExtendFile.Panelis.Application.Modules.Setting.UseCases.UpsertSetting;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.CreateTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.ProcessTest;
+using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestsByBoxId;
+using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestLinesByTestId;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.Login;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -49,6 +51,8 @@ public static class UseCasesDependencyInjection
 
         services.AddScoped<CreateTestUseCase>();
         services.AddScoped<ProcessTestUseCase>();
+        services.AddScoped<GetTestsByBoxIdUseCase>();
+        services.AddScoped<GetTestLinesByTestIdUseCase>();
 
         services.AddScoped<GetSettingUseCase>();
         services.AddScoped<UpsertSettingUseCase>();

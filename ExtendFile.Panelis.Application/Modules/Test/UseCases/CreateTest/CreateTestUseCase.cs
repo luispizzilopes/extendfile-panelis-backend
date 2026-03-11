@@ -50,6 +50,25 @@ public class CreateTestUseCase
             return Error.Validation("Arquivo duplicado", $"Já existe um teste com o arquivo '{request.File.FileName}'");
 
         var testDate = parsedRecord.TestDate.Date.ToUniversalTime();
+        
+        if (request.ValidateDateFile is true)
+        {
+            var lastTest = await _unitOfWork.TestRepository
+                .GetLastTestOrDefaultByBoxIdAsync(request.BoxId, cancellationToken);
+
+            if (lastTest is not null)
+            {
+                var expectedNextDate = lastTest.TestDate.Date.AddDays(1);
+
+                if (testDate.Date != expectedNextDate)
+                {
+                    return Error.Validation(
+                        "Data inválida",
+                        $"O próximo teste deve ser do dia '{expectedNextDate:dd/MM/yyyy}', pois o último teste foi em '{lastTest.TestDate:dd/MM/yyyy}'."
+                    );
+                }
+            }
+        }
 
         var existingTestByDate = await _unitOfWork.TestRepository
             .GetTestByDateAndBoxIdAsync(testDate, request.BoxId, cancellationToken);
@@ -194,7 +213,7 @@ public class CreateTestUseCase
         List<TestLine> testLines)
     {
         var test = Domain.Modules.Test.Aggregates.Test.Create(
-            name: fileName,
+            name: $"Arquivo {testDate:dd/MM/yyyy}",
             fileName: fileName,
             boxId: BoxId.Create(boxId),
             testDate: testDate.Date.ToUniversalTime());
