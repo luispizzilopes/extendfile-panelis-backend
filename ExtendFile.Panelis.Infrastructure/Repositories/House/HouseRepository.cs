@@ -33,7 +33,8 @@ public class HouseRepository : IHouseRepository
         CancellationToken cancellationToken)
     {
         return await _context.Houses
-            .Include(x => x.Boxes)
+            .Include(x => x.Boxes.OrderBy(box => box.Name))
+            .OrderBy(x => x.Name)
             .PaginationAsync(paginationParams, cancellationToken);
     }
 
