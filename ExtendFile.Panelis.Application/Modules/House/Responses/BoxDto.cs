@@ -9,4 +9,5 @@ public class BoxDto
     public Guid HouseId { get; set; }
     public int? MaxQuantity { get; set; }
     public int? Quantity { get; set; }
+    public int? DaysWithoutTest { get; set; }
 }

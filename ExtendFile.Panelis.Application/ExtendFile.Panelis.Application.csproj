@@ -26,7 +26,6 @@
       <Folder Include="Modules\Dashboard\Queries\GetDashboard\" />
       <Folder Include="Modules\Dashboard\UseCases\GetDashboard\" />
       <Folder Include="Modules\House\Events\" />
-      <Folder Include="Modules\Test\Queries\" />
     </ItemGroup>
 
 </Project>

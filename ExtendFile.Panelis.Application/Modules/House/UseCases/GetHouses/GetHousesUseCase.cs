@@ -21,6 +21,7 @@ public class GetHousesUseCase
 
         var data = MapToDto(result.Data);
 
+        await EnrichWithDaysWithoutTestAsync(data, cancellationToken);
         await EnrichWithCatQuantitiesAsync(data, cancellationToken);
 
         return new PaginedResult<HouseDto>
@@ -47,9 +48,30 @@ public class GetHousesUseCase
                 CreatedAt = box.CreatedAt,
                 UpdatedAt = box.UpdatedAt,
                 HouseId = house.Id.Value,
-                MaxQuantity = box.MaxQuantity
+                MaxQuantity = box.MaxQuantity,
             }).ToList()
         }).ToList();
+
+    private async Task EnrichWithDaysWithoutTestAsync(List<HouseDto>? data, CancellationToken cancellationToken)
+    {
+        if (data is not { Count: > 0 }) return;
+
+        var boxIds = data
+            .SelectMany(h => h.Boxes ?? [])
+            .Select(b => b.Id)
+            .ToList();
+
+        if (boxIds.Count == 0) return;
+
+        var daysMap = await _unitOfWork
+            .TestRepository
+            .GetCountDaysWithoutTestBatchAsync(boxIds, cancellationToken);
+
+        foreach (var box in data.SelectMany(h => h.Boxes ?? []))
+        {
+            box.DaysWithoutTest = daysMap.GetValueOrDefault(box.Id, 0);
+        }
+    }
 
     private async Task EnrichWithCatQuantitiesAsync(List<HouseDto>? data, CancellationToken cancellationToken)
     {

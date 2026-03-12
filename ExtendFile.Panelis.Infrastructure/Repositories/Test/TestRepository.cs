@@ -157,4 +157,34 @@ public class TestRepository : ITestRepository
             .OrderByDescending(x => x.TestDate)
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public async Task<int?> GetCountDaysWithoutTestAsync(Guid boxId, CancellationToken cancellationToken)
+    {
+        var test = await GetLastTestOrDefaultByBoxIdAsync(boxId, cancellationToken);
+
+        if (test is null)
+            return null;
+
+        var dateNow = DateTime.UtcNow.Date;
+        var dateLastTest = test.TestDate.Date;
+
+        return (dateNow - dateLastTest).Days;
+    }
+
+    public async Task<Dictionary<Guid, int?>> GetCountDaysWithoutTestBatchAsync(
+        IEnumerable<Guid> boxIds,
+        CancellationToken cancellationToken = default)
+    {
+        var ids = boxIds.Select(BoxId.Create).ToList();
+
+        return await _context.Tests
+            .Where(t => ids.Contains(t.BoxId))
+            .GroupBy(t => t.BoxId)
+            .Select(g => new
+            {
+                BoxId = g.Key.Value, 
+                DaysWithoutTest = (int?)(DateTime.UtcNow.Date - g.Max(t => t.TestDate.Date)).Days
+            })
+            .ToDictionaryAsync(x => x.BoxId, x => x.DaysWithoutTest, cancellationToken);
+    }
 }

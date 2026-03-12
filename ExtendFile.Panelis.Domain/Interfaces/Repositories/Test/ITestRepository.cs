@@ -16,4 +16,8 @@ public interface ITestRepository
     
     Task<bool> AnyTestByBoxIdAsync(Guid boxId, CancellationToken cancellationToken);
     Task<Modules.Test.Aggregates.Test?> GetLastTestOrDefaultByBoxIdAsync(Guid boxId, CancellationToken cancellationToken);
+    Task<int?> GetCountDaysWithoutTestAsync(Guid boxId, CancellationToken cancellationToken);
+    Task<Dictionary<Guid, int?>> GetCountDaysWithoutTestBatchAsync(
+        IEnumerable<Guid> boxIds,
+        CancellationToken cancellationToken = default);
 }

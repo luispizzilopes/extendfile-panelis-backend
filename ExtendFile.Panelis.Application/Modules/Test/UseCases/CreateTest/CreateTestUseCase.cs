@@ -6,6 +6,7 @@ using ExtendFile.Panelis.Application.Modules.Setting.UseCases.GetSetting;
 using ExtendFile.Panelis.Application.Modules.Setting.Responses;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Interfaces.UnitOfWork;
+using ExtendFile.Panelis.Domain.Modules.Cat.Enums;
 using ExtendFile.Panelis.Domain.Modules.House.ValueObject;
 using ExtendFile.Panelis.Domain.Modules.Test.Entities;
 using ExtendFile.Panelis.Domain.Modules.Test.Enums;
@@ -148,6 +149,10 @@ public class CreateTestUseCase
                 continue;
 
             var totalFood = catInfo.FirstFood + catInfo.SecondFood;
+            
+            if (totalFood == 0 && cat.Location == CatLocation.AtVeterinarian)
+                continue;
+
             var foodAmountStatus = ResolveFoodAmountStatus(totalFood, setting.LessThanEnoughThreshold, setting.MoreThanEnoughThreshold);
 
             var testLine = TestLine.Create(
@@ -187,6 +192,9 @@ public class CreateTestUseCase
 
             var cat = await _unitOfWork.CatRepository.GetCatByHashAsync(catHash, cancellationToken);
             if (cat is null)
+                continue;
+
+            if (cat.Location == CatLocation.AtVeterinarian)
                 continue;
 
             var testLine = TestLine.Create(
