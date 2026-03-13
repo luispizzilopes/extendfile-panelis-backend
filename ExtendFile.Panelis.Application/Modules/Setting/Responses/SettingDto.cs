@@ -21,6 +21,16 @@ public class SettingDto
     public decimal MoreThanEnoughThreshold { get; set; }
     
     /// <summary>
+    /// Quantidade de dias sem comer para alerta
+    /// </summary>
+    public int DaysWithoutEatingForAlert { get; set; }
+    
+    /// <summary>
+    /// Quantidade de dias sem comer para aviso
+    /// </summary>
+    public int DaysWithoutEatingForWarning { get; set; }
+    
+    /// <summary>
     /// Data de criação da configuração
     /// </summary>
     public DateTime CreatedAt { get; set; }

@@ -16,4 +16,14 @@ public class UpsertSettingRequest
     /// Limite mínimo considerado "suficiente" (deve ser > LessThanEnoughThreshold)
     /// </summary>
     public decimal MoreThanEnoughThreshold { get; set; }
+    
+    /// <summary>
+    /// Quantidade de dias sem comer para alerta (deve ser > 0)
+    /// </summary>
+    public int DaysWithoutEatingForAlert { get; set; }
+    
+    /// <summary>
+    /// Quantidade de dias sem comer para aviso (deve ser > DaysWithoutEatingForAlert)
+    /// </summary>
+    public int DaysWithoutEatingForWarning { get; set; }
 }

@@ -13,6 +13,7 @@ public interface ICatRepository
         string? search,
         CancellationToken cancellationToken);
     Task<IEnumerable<Modules.Cat.Aggregates.Cat>> GetAllCatsAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<Modules.Cat.Aggregates.Cat>> GetCatsWithoutEatingAsync(int alertDays, int warningDays, CancellationToken cancellationToken);
     Task<int> GetCatsCountByBoxAsync(Guid boxId, CancellationToken cancellationToken);
     Task<Dictionary<Guid, int>> GetCatsCountByBoxesAsync(IEnumerable<Guid>? boxIds, CancellationToken cancellationToken);
     

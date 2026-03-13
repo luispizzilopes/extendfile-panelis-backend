@@ -74,6 +74,15 @@ public class CatRepository : ICatRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Aggregates.Cat>> GetCatsWithoutEatingAsync(int alertDays, int warningDays, CancellationToken cancellationToken)
+    {
+        return await _context.Cats
+            .AsNoTracking()
+            .Where(x => x.IsActive && 
+                       (x.DaysWithoutEating >= alertDays || x.DaysWithoutEating >= warningDays))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<int> GetCatsCountByBoxAsync(Guid boxId, CancellationToken cancellationToken)
     {
         return await _context.Cats

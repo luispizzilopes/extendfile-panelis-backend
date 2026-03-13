@@ -1,6 +1,9 @@
 using ExtendFile.Panelis.Application.Modules.Test.Commands.CreateTest;
+using ExtendFile.Panelis.Application.Modules.Test.Commands.DeleteTest;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.CreateTest;
+using ExtendFile.Panelis.Application.Modules.Test.Requests.DeleteTest;
 using ExtendFile.Panelis.Application.Modules.Test.Responses.CreateTest;
+using ExtendFile.Panelis.Application.Modules.Test.Responses.DeleteTest;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestLinesByTestId;
 using ExtendFile.Panelis.Application.Modules.Test.Responses;
@@ -107,6 +110,30 @@ public class TestController : ControllerBase
         var request = new GetTestLinesByTestIdRequest { TestId = testId };
         var query = new GetTestLinesByTestIdQuery(request);
         var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+
+    /// <summary>
+    /// Exclui um teste do sistema
+    /// </summary>
+    /// <param name="testId">ID do teste a ser excluído</param>
+    /// <returns>Retorna confirmação da exclusão do teste</returns>
+    /// <response code="200">Teste excluído com sucesso</response>
+    /// <response code="404">Teste não encontrado</response>
+    /// <response code="400">Dados inválidos ou requisição mal formatada</response>
+    /// <response code="401">Usuário não autenticado</response>
+    /// <response code="500">Erro interno do servidor</response>
+    [HttpDelete("{testId}")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(DeleteTestResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteTest(Guid testId)
+    {
+        var request = new DeleteTestRequest { TestId = testId };
+        var command = new DeleteTestCommand(request);
+        var result = await _mediator.Send(command);
         return result.ToActionResult(this);
     }
 }

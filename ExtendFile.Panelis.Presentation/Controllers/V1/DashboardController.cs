@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using ExtendFile.Panelis.Application.Modules.Dashboard.Requests.GetDashboard;
 using ExtendFile.Panelis.Application.Modules.Dashboard.Queries.GetDashboard;
 using ExtendFile.Panelis.Application.Modules.Dashboard.Responses.GetDashboard;
+using ExtendFile.Panelis.Application.Modules.Dashboard.Requests.GetCatsWithoutEating;
+using ExtendFile.Panelis.Application.Modules.Dashboard.Queries.GetCatsWithoutEating;
+using ExtendFile.Panelis.Application.Modules.Dashboard.Responses.GetCatsWithoutEating;
 using ExtendFile.Panelis.Presentation.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -39,6 +42,24 @@ public class DashboardController : ControllerBase
     {
         var request = new GetDashboardRequest();
         var query = new GetDashboardQuery(request);
+        var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+
+    /// <summary>
+    /// Obtém gatos sem comer em estado de alerta e atenção
+    /// </summary>
+    /// <returns>Retorna lista de gatos sem comer com status de alerta ou atenção</returns>
+    [HttpGet("cats-without-eating")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(GetCatsWithoutEatingResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetCatsWithoutEating()
+    {
+        var request = new GetCatsWithoutEatingRequest();
+        var query = new GetCatsWithoutEatingQuery(request);
         var result = await _mediator.Send(query);
         return result.ToActionResult(this);
     }

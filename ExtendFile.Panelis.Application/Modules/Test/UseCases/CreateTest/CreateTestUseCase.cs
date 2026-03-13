@@ -89,6 +89,8 @@ public class CreateTestUseCase
 
         var test = CreateTestAggregate(request.File.FileName, request.BoxId, parsedRecord.TestDate, testLines);
 
+        await UpdateCatsDaysWithoutEatingAsync(testLines, cancellationToken);
+
         await _unitOfWork.TestRepository.CreateTestAsync(test, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
 
@@ -258,4 +260,32 @@ public class CreateTestUseCase
         TotalAmountFood = line.TotalAmountFood,
         FoodAmountStatus = line.FoodAmountStatus
     };
+
+    /// <summary>
+    /// Atualiza o contador de dias sem comer de cada gato baseado no status do alimento consumido.
+    /// Se comeu pouco (LessThanEnough), incrementa o contador. Caso contrário, zera o contador.
+    /// </summary>
+    private async Task UpdateCatsDaysWithoutEatingAsync(List<TestLine> testLines, CancellationToken cancellationToken)
+    {
+        foreach (var testLine in testLines)
+        {
+            var cat = await _unitOfWork.CatRepository
+                .GetCatByIdAsync(testLine.CatId.Value, cancellationToken);
+            
+            if (cat is null)
+                continue;
+
+            if (testLine.FoodAmountStatus == FoodAmountStatus.LessThanEnough)
+            {
+                cat.IncrementDaysWithoutEating();
+            }
+
+            if (testLine.FoodAmountStatus is FoodAmountStatus.Enough or FoodAmountStatus.MoreThanEnough)
+            {
+                cat.ResetDaysWithoutEating();
+            }
+
+            await _unitOfWork.CatRepository.UpdateCatAsync(cat, cancellationToken);
+        }
+    }
 }

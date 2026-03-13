@@ -13,9 +13,11 @@ using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatById;
 using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCats;
 using ExtendFile.Panelis.Application.Modules.Cat.UseCases.GetCatsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Dashboard.UseCases.GetDashboard;
+using ExtendFile.Panelis.Application.Modules.Dashboard.UseCases.GetCatsWithoutEating;
 using ExtendFile.Panelis.Application.Modules.Setting.UseCases.GetSetting;
 using ExtendFile.Panelis.Application.Modules.Setting.UseCases.UpsertSetting;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.CreateTest;
+using ExtendFile.Panelis.Application.Modules.Test.UseCases.DeleteTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetCountDaysWithoutTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.ProcessTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestsByBoxId;
@@ -49,8 +51,10 @@ public static class UseCasesDependencyInjection
         services.AddScoped<LoginUseCase>();
 
         services.AddScoped<GetDashboardUseCase>();
+        services.AddScoped<GetCatsWithoutEatingUseCase>();
 
         services.AddScoped<CreateTestUseCase>();
+        services.AddScoped<DeleteTestUseCase>();
         services.AddScoped<ProcessTestUseCase>();
         services.AddScoped<GetTestsByBoxIdUseCase>();
         services.AddScoped<GetTestLinesByTestIdUseCase>();

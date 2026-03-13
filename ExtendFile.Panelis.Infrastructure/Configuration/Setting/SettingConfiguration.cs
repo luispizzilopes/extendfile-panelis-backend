@@ -25,6 +25,14 @@ public class SettingConfiguration : IEntityTypeConfiguration<Domain.Modules.Sett
             .HasPrecision(18, 2)
             .IsRequired();
 
+        builder.Property(s => s.DaysWithoutEatingForAlert)
+            .IsRequired()
+            .HasDefaultValue(3);
+
+        builder.Property(s => s.DaysWithoutEatingForWarning)
+            .IsRequired()
+            .HasDefaultValue(5);
+
         builder.Property(s => s.CreatedAt)
             .IsRequired();
 

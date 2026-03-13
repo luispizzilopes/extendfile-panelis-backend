@@ -17,6 +17,7 @@ public class Cat : AggregateRoot<CatId>
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
     public bool IsActive { get; set; }
+    public int DaysWithoutEating { get; private set; } = 0;
 
     public Cat() { }
 
@@ -28,7 +29,8 @@ public class Cat : AggregateRoot<CatId>
         decimal weight,
         CatSex sex,
         CatLocation location,
-        BoxId boxId) : base(id)
+        BoxId boxId,
+        int daysWithoutEating = 0) : base(id)
     {
         Name = name;
         Hash = hash;
@@ -37,6 +39,7 @@ public class Cat : AggregateRoot<CatId>
         Sex = sex;
         Location = location;
         BoxId = boxId;
+        DaysWithoutEating = daysWithoutEating;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
         IsActive = true;
@@ -87,6 +90,24 @@ public class Cat : AggregateRoot<CatId>
     public void MoveToBox(BoxId boxId)
     {
         BoxId = boxId;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void IncrementDaysWithoutEating()
+    {
+        DaysWithoutEating++;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void ResetDaysWithoutEating()
+    {
+        DaysWithoutEating = 0;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void SetDaysWithoutEating(int days)
+    {
+        DaysWithoutEating = days >= 0 ? days : 0;
         UpdatedAt = DateTime.UtcNow;
     }
 }

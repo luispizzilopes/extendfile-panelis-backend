@@ -22,6 +22,8 @@ public class GetSettingUseCase
             Id = setting is not null ? setting.Id.Value : Guid.Empty,
             LessThanEnoughThreshold = setting?.LessThanEnoughThreshold ?? 0,
             MoreThanEnoughThreshold = setting?.MoreThanEnoughThreshold ?? 0,
+            DaysWithoutEatingForAlert = setting?.DaysWithoutEatingForAlert ?? 3,
+            DaysWithoutEatingForWarning = setting?.DaysWithoutEatingForWarning ?? 5,
             CreatedAt = setting?.CreatedAt ?? DateTime.UtcNow,
             UpdatedAt = setting?.UpdatedAt,
         };

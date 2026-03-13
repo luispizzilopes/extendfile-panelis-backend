@@ -47,5 +47,7 @@ public class CatConfiguration : IEntityTypeConfiguration<Domain.Modules.Cat.Aggr
         
         builder.Property(c => c.IsActive)
             .IsRequired();
+
+        builder.Property(c => c.DaysWithoutEating);
     }
 }

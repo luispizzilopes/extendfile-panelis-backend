@@ -25,7 +25,9 @@ public class UpsertSettingUseCase
         {
             setting = Domain.Modules.Setting.Aggregates.Setting.Create(
                 request.LessThanEnoughThreshold,
-                request.MoreThanEnoughThreshold);
+                request.MoreThanEnoughThreshold,
+                request.DaysWithoutEatingForAlert,
+                request.DaysWithoutEatingForWarning);
 
             await _unitOfWork.SettingRepository.CreateSettingAsync(setting, cancellationToken);
         }
@@ -33,7 +35,9 @@ public class UpsertSettingUseCase
         {
             existingSetting.Update(
                 request.LessThanEnoughThreshold,
-                request.MoreThanEnoughThreshold);
+                request.MoreThanEnoughThreshold,
+                request.DaysWithoutEatingForAlert,
+                request.DaysWithoutEatingForWarning);
 
             setting = existingSetting;
             _unitOfWork.SettingRepository.UpdateSettingAsync(setting, cancellationToken);
@@ -46,6 +50,8 @@ public class UpsertSettingUseCase
             Id = setting.Id.Value,
             LessThanEnoughThreshold = setting.LessThanEnoughThreshold,
             MoreThanEnoughThreshold = setting.MoreThanEnoughThreshold,
+            DaysWithoutEatingForAlert = setting.DaysWithoutEatingForAlert,
+            DaysWithoutEatingForWarning = setting.DaysWithoutEatingForWarning,
             CreatedAt = setting.CreatedAt,
             UpdatedAt = setting.UpdatedAt
         };
