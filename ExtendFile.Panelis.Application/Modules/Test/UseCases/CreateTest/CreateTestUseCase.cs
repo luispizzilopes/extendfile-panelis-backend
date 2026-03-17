@@ -44,12 +44,6 @@ public class CreateTestUseCase
         var rawText = await ReadFileAsync(request.File);
         var parsedRecord = _processTestUseCase.Execute(rawText);
 
-        var existingTestByFileName = await _unitOfWork.TestRepository
-            .GetTestByFileNameAsync(request.File.FileName, cancellationToken);
-
-        if (existingTestByFileName is not null)
-            return Error.Validation("Arquivo duplicado", $"Já existe um teste com o arquivo '{request.File.FileName}'");
-
         var testDate = parsedRecord.TestDate.Date.ToUniversalTime();
         
         if (request.ValidateDateFile is true)
