@@ -1,5 +1,6 @@
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Test;
+using ExtendFile.Panelis.Domain.Modules.Cat.ValueObject;
 using ExtendFile.Panelis.Domain.Modules.House.Entities;
 using ExtendFile.Panelis.Domain.Modules.House.ValueObject;
 using ExtendFile.Panelis.Domain.Modules.Test.Entities;
@@ -186,5 +187,23 @@ public class TestRepository : ITestRepository
                 DaysWithoutTest = (int?)(DateTime.UtcNow.Date - g.Max(t => t.TestDate.Date)).Days
             })
             .ToDictionaryAsync(x => x.BoxId, x => x.DaysWithoutTest, cancellationToken);
+    }
+
+    public async Task<IEnumerable<TestLine>?> GetTestLinesByCatIdAsync(
+        Guid catId,
+        CancellationToken cancellationToken,
+        int? count = null)
+    {
+        var query = _context.Tests
+            .AsNoTracking()
+            .Where(t => t.Lines.Any(x => x.CatId == CatId.Create(catId)))
+            .OrderByDescending(t => t.TestDate)
+            .SelectMany(t => t.Lines)
+            .Where(l => l.CatId == CatId.Create(catId));
+
+        if (count.HasValue)
+            query = query.Take(count.Value);
+
+        return await query.ToListAsync(cancellationToken);
     }
 }

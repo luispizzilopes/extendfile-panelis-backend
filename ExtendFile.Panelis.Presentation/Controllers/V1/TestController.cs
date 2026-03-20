@@ -6,9 +6,12 @@ using ExtendFile.Panelis.Application.Modules.Test.Responses.CreateTest;
 using ExtendFile.Panelis.Application.Modules.Test.Responses.DeleteTest;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestLinesByTestId;
+using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestLinesByCatWithoutEating;
 using ExtendFile.Panelis.Application.Modules.Test.Responses;
+using ExtendFile.Panelis.Application.Modules.Test.Responses.GetTestLinesByCatWithoutEating;
 using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestLinesByTestId;
+using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestLinesByCatWithoutEating;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -134,6 +137,30 @@ public class TestController : ControllerBase
         var request = new DeleteTestRequest { TestId = testId };
         var command = new DeleteTestCommand(request);
         var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+
+    /// <summary>
+    /// Obtém as linhas de teste de um gato e quantidade de dias sem comer
+    /// </summary>
+    /// <param name="catId">ID do gato</param>
+    /// <returns>Retorna lista com as linhas de teste do gato e dias sem comer</returns>
+    /// <response code="200">Linhas de teste encontradas com sucesso</response>
+    /// <response code="404">Gato não encontrado</response>
+    /// <response code="400">Dados inválidos ou requisição mal formatada</response>
+    /// <response code="401">Usuário não autenticado</response>
+    /// <response code="500">Erro interno do servidor</response>
+    [HttpGet("lines/by-cat/{catId}/without-eating")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(GetTestLinesByCatWithoutEatingResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetTestLinesByCatWithoutEating(Guid catId)
+    {
+        var request = new GetTestLinesByCatWithoutEatingRequest { CatId = catId };
+        var query = new GetTestLinesByCatWithoutEatingQuery(request);
+        var result = await _mediator.Send(query);
         return result.ToActionResult(this);
     }
 }

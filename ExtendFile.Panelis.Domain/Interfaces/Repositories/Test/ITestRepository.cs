@@ -20,4 +20,9 @@ public interface ITestRepository
     Task<Dictionary<Guid, int?>> GetCountDaysWithoutTestBatchAsync(
         IEnumerable<Guid> boxIds,
         CancellationToken cancellationToken = default);
+    
+    Task<IEnumerable<TestLine>?> GetTestLinesByCatIdAsync(
+        Guid catId, 
+        CancellationToken cancellationToken,
+        int? count = null);
 }
