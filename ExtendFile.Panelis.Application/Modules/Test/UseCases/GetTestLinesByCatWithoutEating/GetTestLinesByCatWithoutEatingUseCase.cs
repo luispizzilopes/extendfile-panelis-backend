@@ -28,17 +28,18 @@ public class GetTestLinesByCatWithoutEatingUseCase
         if (testLines is null)
             return Error.NotFound("Linhas de teste não encontradas", "Não foram encontradas linhas de teste para este gato");
 
-        var testLineDtos = testLines.Select(line => new TestLineDto
+        var testLineDtos = testLines.Select(x => new TestLineDto
         {
-            Id = line.Id.Value,
-            Position = line.Position,
-            CatName = line.CatName,
-            CatId = line.CatId.Value,
-            CatHash = line.CatHash,
-            FirstFood = line.FirstFood,
-            SecondFood = line.SecondFood,
-            TotalAmountFood = line.TotalAmountFood,
-            FoodAmountStatus = line.FoodAmountStatus
+            Id = x.Line.Id.Value,
+            Position = x.Line.Position,
+            CatName = x.Line.CatName,
+            CatId = x.Line.CatId.Value,
+            CatHash = x.Line.CatHash,
+            FirstFood = x.Line.FirstFood,
+            SecondFood = x.Line.SecondFood,
+            TotalAmountFood = x.Line.TotalAmountFood,
+            FoodAmountStatus = x.Line.FoodAmountStatus,
+            TestDate = x.TestDate.Date
         }).ToList();
 
         return new GetTestLinesByCatWithoutEatingResponse

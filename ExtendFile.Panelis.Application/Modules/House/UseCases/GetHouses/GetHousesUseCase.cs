@@ -69,7 +69,7 @@ public class GetHousesUseCase
 
         foreach (var box in data.SelectMany(h => h.Boxes ?? []))
         {
-            box.DaysWithoutTest = daysMap.GetValueOrDefault(box.Id, 0);
+            box.DaysWithoutTest = daysMap.GetValueOrDefault(box.Id, 0) - 1;
         }
     }
 

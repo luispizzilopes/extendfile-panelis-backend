@@ -184,26 +184,31 @@ public class TestRepository : ITestRepository
             .Select(g => new
             {
                 BoxId = g.Key.Value, 
-                DaysWithoutTest = (int?)(DateTime.UtcNow.Date - g.Max(t => t.TestDate.Date)).Days
+                DaysWithoutTest = (int?)(DateTime.UtcNow.Date.AddHours(-3) - g.Max(t => t.TestDate.Date)).Days
             })
             .ToDictionaryAsync(x => x.BoxId, x => x.DaysWithoutTest, cancellationToken);
     }
 
-    public async Task<IEnumerable<TestLine>?> GetTestLinesByCatIdAsync(
+    public async Task<IEnumerable<(TestLine Line, DateTime TestDate)>?> GetTestLinesByCatIdAsync(
         Guid catId,
         CancellationToken cancellationToken,
         int? count = null)
     {
+        var catIdValueObject = CatId.Create(catId);
+
         var query = _context.Tests
             .AsNoTracking()
-            .Where(t => t.Lines.Any(x => x.CatId == CatId.Create(catId)))
+            .Where(t => t.Lines.Any(x => x.CatId == catIdValueObject))
             .OrderByDescending(t => t.TestDate)
-            .SelectMany(t => t.Lines)
-            .Where(l => l.CatId == CatId.Create(catId));
+            .SelectMany(t => t.Lines
+                .Where(l => l.CatId == catIdValueObject)
+                .Select(l => new { Line = l, t.TestDate }));
 
         if (count.HasValue)
             query = query.Take(count.Value);
 
-        return await query.ToListAsync(cancellationToken);
+        var raw = await query.ToListAsync(cancellationToken);
+
+        return raw.Select(x => (x.Line, x.TestDate));
     }
 }

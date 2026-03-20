@@ -21,7 +21,7 @@ public interface ITestRepository
         IEnumerable<Guid> boxIds,
         CancellationToken cancellationToken = default);
     
-    Task<IEnumerable<TestLine>?> GetTestLinesByCatIdAsync(
+    Task<IEnumerable<(TestLine Line, DateTime TestDate)>?> GetTestLinesByCatIdAsync(
         Guid catId, 
         CancellationToken cancellationToken,
         int? count = null);

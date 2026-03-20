@@ -13,4 +13,5 @@ public class TestLineDto
     public decimal SecondFood { get; set; }
     public decimal TotalAmountFood { get; set; }
     public FoodAmountStatus FoodAmountStatus { get; set; }
+    public DateTime? TestDate { get; set; }
 }
