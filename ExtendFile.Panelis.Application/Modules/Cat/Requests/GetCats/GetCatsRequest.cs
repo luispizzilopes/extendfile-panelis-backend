@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Modules.Cat.Enums;
 

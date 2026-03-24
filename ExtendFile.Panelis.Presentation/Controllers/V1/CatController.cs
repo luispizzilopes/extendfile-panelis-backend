@@ -15,6 +15,7 @@ using ExtendFile.Panelis.Application.Modules.Cat.Commands.DeleteCat;
 using ExtendFile.Panelis.Application.Modules.Cat.Responses;
 using ExtendFile.Panelis.Application.Modules.Cat.Responses.DeleteCat;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
+using ExtendFile.Panelis.Domain.Modules.Cat.Enums;
 using ExtendFile.Panelis.Presentation.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -59,15 +60,33 @@ public class CatController : ControllerBase
     /// <summary>
     /// Obtém lista paginada de gatos
     /// </summary>
-    /// <param name="request">Parâmetros de filtro e paginação</param>
+    /// <param name="name">Nome do gato</param>
+    /// <param name="location">Localização do gato</param>
+    /// <param name="isActive">Se o gato está ativo</param>
+    /// <param name="sex">Sexo do gato</param>
+    /// <param name="paginationParams">Parâmetros de paginação</param>
     /// <returns>Retorna lista paginada de gatos</returns>
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginedResult<CatDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetCats([FromQuery] GetCatsRequest request)
+    public async Task<IActionResult> GetCats(
+        [FromQuery] string? name,
+        [FromQuery] CatLocation? location,
+        [FromQuery] bool? isActive,
+        [FromQuery] CatSex? sex,
+        [FromQuery] PaginationParams paginationParams)
     {
+        var request = new GetCatsRequest
+        {
+            Name = name,
+            Location = location,
+            IsActive = isActive,
+            Sex = sex,
+            PaginationParams = paginationParams
+        };
+
         var query = new GetCatsQuery(request);
         var result = await _mediator.Send(query);
         return result.ToActionResult(this);
