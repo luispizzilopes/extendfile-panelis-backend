@@ -16,5 +16,12 @@ public class GetCatsQueryValidator : AbstractValidator<GetCatsQuery>
             .WithMessage("Tamanho da página deve ser maior que 0")
             .LessThan(200)
             .WithMessage("Tamanho da página não pode exceder 200");
+
+        When(x => !string.IsNullOrEmpty(x.Request.Name), () =>
+        {
+            RuleFor(x => x.Request.Name)
+                .MaximumLength(100)
+                .WithMessage("Nome do gato não pode exceder 100 caracteres");
+        });
     }
 }

@@ -59,23 +59,15 @@ public class CatController : ControllerBase
     /// <summary>
     /// Obtém lista paginada de gatos
     /// </summary>
-    /// <param name="paginationParams">Parâmetros de paginação</param>
-    /// <param name="search">Pesquisa pelo nome do gato</param>
+    /// <param name="request">Parâmetros de filtro e paginação</param>
     /// <returns>Retorna lista paginada de gatos</returns>
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginedResult<CatDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetCats(
-        [FromQuery] string? search,
-        [FromQuery] PaginationParams paginationParams)
+    public async Task<IActionResult> GetCats([FromQuery] GetCatsRequest request)
     {
-        var request = new GetCatsRequest
-        {
-            Search = search,
-            PaginationParams = paginationParams
-        };
         var query = new GetCatsQuery(request);
         var result = await _mediator.Send(query);
         return result.ToActionResult(this);

@@ -1,4 +1,5 @@
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
+using ExtendFile.Panelis.Domain.Modules.Cat.Enums;
 
 namespace ExtendFile.Panelis.Domain.Interfaces.Repositories.Cat;
 
@@ -10,7 +11,10 @@ public interface ICatRepository
     Task<IEnumerable<Modules.Cat.Aggregates.Cat>> GetCatsByBoxIdAsync(Guid boxId, CancellationToken cancellationToken);
     Task<PaginedResult<Modules.Cat.Aggregates.Cat>> GetCatsAsync(
         PaginationParams paginationParams, 
-        string? search,
+        string? name,
+        CatLocation? location,
+        bool? isActive,
+        CatSex? sex,
         CancellationToken cancellationToken);
     Task<IEnumerable<Modules.Cat.Aggregates.Cat>> GetAllCatsAsync(CancellationToken cancellationToken);
     Task<IEnumerable<Modules.Cat.Aggregates.Cat>> GetCatsWithoutEatingAsync(int alertDays, int warningDays, CancellationToken cancellationToken);

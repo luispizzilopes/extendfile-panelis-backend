@@ -1,5 +1,6 @@
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Cat;
+using ExtendFile.Panelis.Domain.Modules.Cat.Enums;
 using ExtendFile.Panelis.Domain.Modules.Cat.ValueObject;
 using ExtendFile.Panelis.Domain.Modules.House.ValueObject;
 using ExtendFile.Panelis.Infrastructure.Context;
@@ -56,13 +57,25 @@ public class CatRepository : ICatRepository
 
     public async Task<PaginedResult<Aggregates.Cat>> GetCatsAsync(
         PaginationParams paginationParams, 
-        string? search,
+        string? name,
+        CatLocation? location,
+        bool? isActive,
+        CatSex? sex,
         CancellationToken cancellationToken)
     {
         var query = _context.Cats.AsQueryable();
         
-        if (!string.IsNullOrEmpty(search))
-            query = query.Where(x => x.Name.ToLower().Contains(search.ToLower()));
+        if (!string.IsNullOrEmpty(name))
+            query = query.Where(x => x.Name.ToLower().Contains(name.ToLower()));
+        
+        if (location.HasValue)
+            query = query.Where(x => x.Location == location);
+        
+        if (isActive.HasValue)
+            query = query.Where(x => x.IsActive == isActive.Value);
+        
+        if (sex.HasValue)
+            query = query.Where(x => x.Sex == sex.Value);
         
         return await query.PaginationAsync(paginationParams, cancellationToken);
     }

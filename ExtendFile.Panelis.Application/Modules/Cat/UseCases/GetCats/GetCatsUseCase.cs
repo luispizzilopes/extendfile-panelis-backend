@@ -18,7 +18,13 @@ public class GetCatsUseCase
     public async Task<ErrorOr<PaginedResult<CatDto>>> ExecuteAsync(GetCatsRequest request, CancellationToken cancellationToken = default)
     {
         var catsResult = await _unitOfWork.CatRepository
-            .GetCatsAsync(request.PaginationParams, request.Search, cancellationToken);
+            .GetCatsAsync(
+                request.PaginationParams, 
+                request.Name,
+                request.Location,
+                request.IsActive,
+                request.Sex,
+                cancellationToken);
         
         var catDtos = catsResult.Data?.Select(cat => new CatDto
         {
