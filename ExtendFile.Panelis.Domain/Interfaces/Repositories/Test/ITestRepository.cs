@@ -25,4 +25,8 @@ public interface ITestRepository
         Guid catId, 
         CancellationToken cancellationToken,
         int? count = null);
+    Task<PaginedResult<(TestLine Line, DateTime TestDate)>> GetTestLinesByCatIdPaginatedAsync(
+        Guid catId, 
+        PaginationParams paginationParams, 
+        CancellationToken cancellationToken);
 }

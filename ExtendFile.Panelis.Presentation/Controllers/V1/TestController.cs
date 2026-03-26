@@ -7,11 +7,13 @@ using ExtendFile.Panelis.Application.Modules.Test.Responses.DeleteTest;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestLinesByTestId;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestLinesByCatWithoutEating;
+using ExtendFile.Panelis.Application.Modules.Test.Requests.GetTestLinesByCatId;
 using ExtendFile.Panelis.Application.Modules.Test.Responses;
 using ExtendFile.Panelis.Application.Modules.Test.Responses.GetTestLinesByCatWithoutEating;
 using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestLinesByTestId;
 using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestLinesByCatWithoutEating;
+using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestLinesByCatId;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -160,6 +162,37 @@ public class TestController : ControllerBase
     {
         var request = new GetTestLinesByCatWithoutEatingRequest { CatId = catId };
         var query = new GetTestLinesByCatWithoutEatingQuery(request);
+        var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+
+    /// <summary>
+    /// Obtém as linhas de teste de um gato específico
+    /// </summary>
+    /// <param name="catId">ID do gato</param>
+    /// <param name="paginationParams">Parâmetros de paginação</param>
+    /// <returns>Retorna lista paginada com as linhas de teste do gato</returns>
+    /// <response code="200">Linhas de teste encontradas com sucesso</response>
+    /// <response code="404">Gato não encontrado ou sem linhas de teste</response>
+    /// <response code="400">Dados inválidos ou requisição mal formatada</response>
+    /// <response code="401">Usuário não autenticado</response>
+    /// <response code="500">Erro interno do servidor</response>
+    [HttpGet("lines/by-cat/{catId}")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(PaginedResult<TestLineDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetTestLinesByCatId(
+        Guid catId,
+        [FromQuery] PaginationParams paginationParams)
+    {
+        var request = new GetTestLinesByCatIdRequest 
+        { 
+            CatId = catId,
+            PaginationParams = paginationParams
+        };
+        var query = new GetTestLinesByCatIdQuery(request);
         var result = await _mediator.Send(query);
         return result.ToActionResult(this);
     }

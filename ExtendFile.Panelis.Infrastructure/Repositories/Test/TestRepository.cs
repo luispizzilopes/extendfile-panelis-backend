@@ -211,4 +211,38 @@ public class TestRepository : ITestRepository
 
         return raw.Select(x => (x.Line, x.TestDate));
     }
+
+    public async Task<PaginedResult<(TestLine Line, DateTime TestDate)>> GetTestLinesByCatIdPaginatedAsync(
+        Guid catId, 
+        PaginationParams paginationParams, 
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var catIdValueObject = CatId.Create(catId);
+
+            var query = _context.Tests
+                .AsNoTracking()
+                .Where(t => t.Lines.Any(x => x.CatId == catIdValueObject))
+                .OrderByDescending(t => t.TestDate)
+                .SelectMany(t => t.Lines
+                    .Where(l => l.CatId == catIdValueObject)
+                    .Select(l => new { Line = l, t.TestDate }));
+
+            var paginedResult = await query.PaginationAsync(paginationParams, cancellationToken);
+            
+            return new PaginedResult<(TestLine Line, DateTime TestDate)>
+            {
+                Data = paginedResult.Data?.Select(x => (x.Line, x.TestDate)).ToList(),
+                TotalRecords = paginedResult.TotalRecords,
+                PageNumber = paginedResult.PageNumber,
+                PageSize = paginedResult.PageSize
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro ao buscar as linhas de teste paginadas por CatId. Erro: {Message}", ex.Message);
+            throw;
+        }
+    }
 }
