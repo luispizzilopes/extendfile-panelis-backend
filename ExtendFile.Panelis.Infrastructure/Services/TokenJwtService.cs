@@ -54,6 +54,7 @@ public class TokenJwtService : ITokenJwtService
         var claims = new List<Claim>
         {
             new("Id", user.Id), 
+            new (ClaimTypes.Email, user.Email ?? string.Empty),
             new(ClaimTypes.Name, user.UserName ?? string.Empty)
         };
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ExtendFile.Panelis.Application.Modules.User.Requests;
 using ExtendFile.Panelis.Application.Modules.User.Queries.UserList;
+using ExtendFile.Panelis.Application.Modules.User.Commands;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Application.Modules.User.Responses;
 using ExtendFile.Panelis.Presentation.Extensions;
@@ -53,6 +54,42 @@ public class UserController : ControllerBase
 
         var query = new UserListQuery(request);
         var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Atualiza dados de um usuário
+    /// </summary>
+    /// <param name="request">Dados para atualização</param>
+    /// <returns>Retorna usuário atualizado</returns>
+    [HttpPut]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(UserUpdateResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Update([FromBody] UserUpdateRequest request)
+    {
+        var command = new UserUpdateCommand(request);
+        var result = await _mediator.Send(command);
+        return result.ToActionResult(this);
+    }
+    
+    /// <summary>
+    /// Cria um novo usuário
+    /// </summary>
+    /// <param name="request">Dados para criação do usuário</param>
+    /// <returns>Retorna usuário criado com senha gerada</returns>
+    [HttpPost]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(UserCreateResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Create([FromBody] UserCreateRequest request)
+    {
+        var command = new UserCreateCommand(request);
+        var result = await _mediator.Send(command);
         return result.ToActionResult(this);
     }
 }
