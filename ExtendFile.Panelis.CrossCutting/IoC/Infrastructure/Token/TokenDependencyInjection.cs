@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -23,5 +24,11 @@ public static class TokenDependencyInjection
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:key"]!))
             });
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireAdminClaim", policy => 
+                policy.RequireClaim("admin", "true"));
+        });
     }
 }

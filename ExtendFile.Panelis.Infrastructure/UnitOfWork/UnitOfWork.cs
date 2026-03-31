@@ -3,6 +3,7 @@ using ExtendFile.Panelis.Domain.Interfaces.Repositories;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Cat;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Setting;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Test;
+using ExtendFile.Panelis.Domain.Interfaces.Repositories.User;
 using ExtendFile.Panelis.Domain.Interfaces.UnitOfWork;
 using ExtendFile.Panelis.Infrastructure.Context;
 using ExtendFile.Panelis.Infrastructure.Repositories.Cat;
@@ -10,6 +11,7 @@ using ExtendFile.Panelis.Infrastructure.Repositories.Dashboard;
 using ExtendFile.Panelis.Infrastructure.Repositories.House;
 using ExtendFile.Panelis.Infrastructure.Repositories.Setting;
 using ExtendFile.Panelis.Infrastructure.Repositories.Test;
+using ExtendFile.Panelis.Infrastructure.Repositories.User;
 using Microsoft.Extensions.Logging;
 
 namespace ExtendFile.Panelis.Infrastructure.UnitOfWork;
@@ -30,6 +32,9 @@ public class UnitOfWork : IUnitOfWork
     private SettingRepository _settingRepository;
     private readonly ILogger<SettingRepository> _settingLogger;
     
+    private UserRepository _userRepository;
+    private readonly ILogger<UserRepository> _userLogger;
+    
     private DashboardReadModelRepository  _dashboardReadModelRepository;
 
     public UnitOfWork(
@@ -37,13 +42,15 @@ public class UnitOfWork : IUnitOfWork
         ILogger<HouseRepository> houseLogger,
         ILogger<CatRepository> catLogger,
         ILogger<TestRepository> testLogger,
-        ILogger<SettingRepository> settingLogger)
+        ILogger<SettingRepository> settingLogger,
+        ILogger<UserRepository> userLogger)
     {
         _context = context;
         _houseLogger = houseLogger;
         _catLogger = catLogger;
         _testLogger = testLogger;
         _settingLogger = settingLogger;
+        _userLogger = userLogger;
     }
 
     public IHouseRepository HouseRepository
@@ -88,6 +95,15 @@ public class UnitOfWork : IUnitOfWork
         get
         {
             return _settingRepository = _settingRepository ?? new SettingRepository(_context, _settingLogger);
+        }
+        set { }
+    }
+
+    public IUserRepository UserRepository
+    {
+        get
+        {
+            return _userRepository = _userRepository ?? new UserRepository(_context, _userLogger);
         }
         set { }
     }

@@ -51,13 +51,16 @@ public class TokenJwtService : ITokenJwtService
 
     private Claim[] CreateUserClaims(User user)
     {
-        Claim[] claims =
-        [
+        var claims = new List<Claim>
+        {
             new("Id", user.Id), 
             new(ClaimTypes.Name, user.UserName ?? string.Empty)
-        ];
+        };
 
-        return claims; 
+        if (!string.IsNullOrEmpty(user.Email) && user.Email.Contains("admin", StringComparison.OrdinalIgnoreCase))
+            claims.Add(new Claim("admin", "true"));
+
+        return claims.ToArray(); 
     }
 
     private SigningCredentials CreateSigningCredentials()

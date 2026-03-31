@@ -25,6 +25,7 @@ using ExtendFile.Panelis.Application.Modules.Test.UseCases.ProcessTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestLinesByTestId;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.Login;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.UserList;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtendFile.Panelis.CrossCutting.IoC.Application.UseCases;
@@ -51,6 +52,7 @@ public static class UseCasesDependencyInjection
         services.AddScoped<DeleteCatUseCase>();
 
         services.AddScoped<LoginUseCase>();
+        services.AddScoped<UserListUseCase>();
 
         services.AddScoped<GetDashboardUseCase>();
         services.AddScoped<GetCatsWithoutEatingUseCase>();
