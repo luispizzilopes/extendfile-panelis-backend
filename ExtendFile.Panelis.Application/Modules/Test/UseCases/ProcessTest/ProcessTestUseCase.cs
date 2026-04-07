@@ -144,19 +144,36 @@ public class ProcessTestUseCase
     }
 
     /// <summary>
-    /// Percorre o texto bruto completo para encontrar e retornar a primeira data válida.
+    /// Extrai a data do teste pegando o primeiro registro de cada gato,
+    /// filtrando datas distintas e retornando a menor data.
     /// Usa DateTime.Today como fallback se nenhuma data for encontrada.
     /// </summary>
     private static DateTime ExtractFirstDate(string rawText)
     {
-        foreach (var line in rawText.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
+        var blocks = SplitIntoBlocks(rawText);
+        var firstDatesByCat = new Dictionary<string, DateTime>();
+
+        foreach (var block in blocks)
         {
-            var parts = line.Trim().Split([' '], StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length == 5 && TryParseDateTime(parts[2], parts[3], out DateTime dateTime))
-                return dateTime.Date;
+            var lines = ExtractValidLines(block);
+            if (lines.Count == 0) continue;
+
+            var catCode = ExtractCatCode(lines);
+            if (catCode is null) continue;
+
+            var measurementLines = lines
+                .Select(TryParseMeasurementLine)
+                .Where(m => m != null)
+                .OrderBy(m => m.DateTime)
+                .ToList();
+
+            if (measurementLines.Count > 0 && !firstDatesByCat.ContainsKey(catCode))
+            {
+                firstDatesByCat[catCode] = measurementLines.First().DateTime.Date;
+            }
         }
 
-        return DateTime.Today;
+        return firstDatesByCat.Count == 0 ? DateTime.Today : firstDatesByCat.Values.Min();
     }
 
     /// <summary>
