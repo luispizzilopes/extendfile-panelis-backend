@@ -25,6 +25,7 @@ using ExtendFile.Panelis.Application.Modules.Test.UseCases.ProcessTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestLinesByTestId;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.Login;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.ResetPassword;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserList;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserUpdate;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserCreate;
@@ -57,6 +58,7 @@ public static class UseCasesDependencyInjection
         services.AddScoped<UserListUseCase>();
         services.AddScoped<UserUpdateUseCase>();
         services.AddScoped<UserCreateUseCase>();
+        services.AddScoped<ResetPasswordUseCase>();
 
         services.AddScoped<GetDashboardUseCase>();
         services.AddScoped<GetCatsWithoutEatingUseCase>();
