@@ -29,6 +29,9 @@ using ExtendFile.Panelis.Application.Modules.User.UseCases.ResetPassword;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserList;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserUpdate;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserCreate;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.RequestPasswordReset;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.VerifyPasswordResetCode;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.ConfirmPasswordReset;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtendFile.Panelis.CrossCutting.IoC.Application.UseCases;
@@ -59,6 +62,9 @@ public static class UseCasesDependencyInjection
         services.AddScoped<UserUpdateUseCase>();
         services.AddScoped<UserCreateUseCase>();
         services.AddScoped<ResetPasswordUseCase>();
+        services.AddScoped<RequestPasswordResetUseCase>();
+        services.AddScoped<VerifyPasswordResetCodeUseCase>();
+        services.AddScoped<ConfirmPasswordResetUseCase>();
 
         services.AddScoped<GetDashboardUseCase>();
         services.AddScoped<GetCatsWithoutEatingUseCase>();

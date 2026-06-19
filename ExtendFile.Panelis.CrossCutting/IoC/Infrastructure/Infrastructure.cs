@@ -16,7 +16,7 @@ public static class Infrastructure
         services.AddAppDbContextDependencyInjection(configuration);
         services.AddRepositoriesDependencyInjection();
         services.AddUnitOfWorkDependencyInjection();
-        services.AddServicesDependencyInjection();
+        services.AddServicesDependencyInjection(configuration);
         services.AddTokenDependencyInjection(configuration);
         services.AddIdentityDependencyInjection();
     }
