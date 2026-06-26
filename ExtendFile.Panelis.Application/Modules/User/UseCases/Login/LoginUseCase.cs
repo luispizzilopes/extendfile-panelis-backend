@@ -41,10 +41,13 @@ public class LoginUseCase
             return Error.Validation("Login.InvalidCredentials", "Email ou senha inválidos");
         }
 
+        user.LastLoginAt = DateTime.UtcNow;
+        await _userManager.UpdateAsync(user);
+
         var tokenJwtInformation = _tokenJwtService.CreateTokenUser(user);
-        
+
         return new UserSessionResponse(
-            user.Id, 
+            user.Id,
             user.Email,
             user.Name,
             tokenJwtInformation);

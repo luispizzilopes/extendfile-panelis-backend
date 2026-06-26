@@ -27,6 +27,7 @@ public class UserListUseCase
                 Email = u.Email!,
                 Picture = u.Picture,
                 Active = u.Active,
+                LastLoginAt = u.LastLoginAt,
             }).ToList();
 
         return new PaginedResult<UserListResponse>
