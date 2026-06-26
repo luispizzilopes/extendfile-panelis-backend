@@ -20,6 +20,7 @@ public static class ServicesDependencyInjection
 
         services.AddMemoryCache();
         services.AddSingleton<IPasswordResetCodeStore, PasswordResetCodeStore>();
+        services.AddSingleton<ITwoFactorCodeStore, TwoFactorCodeStore>();
     }
 
     private static void AddEmailService(this IServiceCollection services, IConfiguration configuration)

@@ -32,6 +32,9 @@ using ExtendFile.Panelis.Application.Modules.User.UseCases.UserCreate;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.RequestPasswordReset;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.VerifyPasswordResetCode;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.ConfirmPasswordReset;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.VerifyTwoFactor;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.EnableTwoFactor;
+using ExtendFile.Panelis.Application.Modules.User.UseCases.DisableTwoFactor;
 using ExtendFile.Panelis.Application.Modules.Report.UseCases.GetCatFoodConsumption;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -66,6 +69,9 @@ public static class UseCasesDependencyInjection
         services.AddScoped<RequestPasswordResetUseCase>();
         services.AddScoped<VerifyPasswordResetCodeUseCase>();
         services.AddScoped<ConfirmPasswordResetUseCase>();
+        services.AddScoped<VerifyTwoFactorUseCase>();
+        services.AddScoped<EnableTwoFactorUseCase>();
+        services.AddScoped<DisableTwoFactorUseCase>();
 
         services.AddScoped<GetDashboardUseCase>();
         services.AddScoped<GetCatsWithoutEatingUseCase>();
