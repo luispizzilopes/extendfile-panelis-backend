@@ -16,7 +16,7 @@ public static class ConfigurationExtension
         services.AddSwaggerGen();
         services.AddSwaggerConfiguration(configurationManager);
         
-        services.AddInfrastructureDependencyInjection(configurationManager);
+        services.AddInfrastructureDependencyInjection(configurationManager, hostingEnvironment);
         services.AddApplicationDependencyInjection(configurationManager);
         
         services.AddCustomLogger(configurationManager);

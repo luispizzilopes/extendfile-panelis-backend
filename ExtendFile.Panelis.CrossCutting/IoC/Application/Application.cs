@@ -13,6 +13,8 @@ public static class Application
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
         
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>)); 
+        
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
         services.AddUseCasesDependencyInjection();
     }
