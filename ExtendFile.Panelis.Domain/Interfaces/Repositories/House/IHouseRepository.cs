@@ -9,6 +9,7 @@ public interface IHouseRepository
     Task<House?> GetHouseByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<PaginedResult<House>> GetHousesAsync(PaginationParams paginationParams, CancellationToken cancellationToken);
     Task<IEnumerable<House>> GetAllHousesAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<House>> GetAllHousesWithBoxesAsync(CancellationToken cancellationToken);
     Task<House?> GetHouseByBoxIdAsync(Guid boxId, CancellationToken cancellationToken);
     Task<Box?> GetBoxByIdAsync(Guid boxId, CancellationToken cancellationToken);
     

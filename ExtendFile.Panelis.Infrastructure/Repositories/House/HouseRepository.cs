@@ -45,6 +45,15 @@ public class HouseRepository : IHouseRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Domain.Modules.House.Aggregates.House>> GetAllHousesWithBoxesAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Houses
+            .AsNoTracking()
+            .Include(x => x.Boxes.OrderBy(box => box.Name))
+            .OrderBy(x => x.Name)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Box?> GetBoxByIdAsync(Guid boxId, CancellationToken cancellationToken)
     {
         return await _context.Boxes

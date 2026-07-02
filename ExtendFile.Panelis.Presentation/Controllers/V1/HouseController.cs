@@ -8,8 +8,10 @@ using ExtendFile.Panelis.Application.Modules.House.Requests.UpdateBox;
 using ExtendFile.Panelis.Application.Modules.House.Requests.DeleteBox;
 using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouseById;
 using ExtendFile.Panelis.Application.Modules.House.Requests.GetHouses;
+using ExtendFile.Panelis.Application.Modules.House.Requests.GetHousesOverview;
 using ExtendFile.Panelis.Application.Modules.House.Queries.GetHouseById;
 using ExtendFile.Panelis.Application.Modules.House.Queries.GetHouses;
+using ExtendFile.Panelis.Application.Modules.House.Queries.GetHousesOverview;
 using ExtendFile.Panelis.Application.Modules.House.Commands.CreateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Commands.UpdateHouse;
 using ExtendFile.Panelis.Application.Modules.House.Commands.DeleteHouse;
@@ -42,6 +44,23 @@ public class HouseController : ControllerBase
         _mediator = mediator;
     }
     
+    /// <summary>
+    /// Obtém visão geral hierárquica de prédios, boxes e gatos
+    /// </summary>
+    /// <returns>Retorna lista de prédios com seus boxes e gatos</returns>
+    [HttpGet("overview")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(IEnumerable<HouseOverviewDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetOverview()
+    {
+        var request = new GetHousesOverviewRequest();
+        var query = new GetHousesOverviewQuery(request);
+        var result = await _mediator.Send(query);
+        return result.ToActionResult(this);
+    }
+
     /// <summary>
     /// Obtém casa/prédio por ID
     /// </summary>
