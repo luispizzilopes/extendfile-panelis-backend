@@ -17,7 +17,6 @@ using ExtendFile.Panelis.Application.Modules.Cat.Responses.DeleteCat;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using ExtendFile.Panelis.Domain.Modules.Cat.Enums;
 using ExtendFile.Panelis.Presentation.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ExtendFile.Panelis.Presentation.Controllers.V1;
@@ -25,7 +24,7 @@ namespace ExtendFile.Panelis.Presentation.Controllers.V1;
 /// <summary>
 /// Controller para operações de Gatos
 /// </summary>
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]

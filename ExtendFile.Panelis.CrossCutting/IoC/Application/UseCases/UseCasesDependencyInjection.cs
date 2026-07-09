@@ -25,7 +25,6 @@ using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestLinesByCatId;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.ProcessTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestsByBoxId;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.GetTestLinesByTestId;
-using ExtendFile.Panelis.Application.Modules.User.UseCases.Login;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.ResetPassword;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserList;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.UserUpdate;
@@ -33,7 +32,6 @@ using ExtendFile.Panelis.Application.Modules.User.UseCases.UserCreate;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.RequestPasswordReset;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.VerifyPasswordResetCode;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.ConfirmPasswordReset;
-using ExtendFile.Panelis.Application.Modules.User.UseCases.VerifyTwoFactor;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.EnableTwoFactor;
 using ExtendFile.Panelis.Application.Modules.User.UseCases.DisableTwoFactor;
 using ExtendFile.Panelis.Application.Modules.Report.UseCases.GetCatFoodConsumption;
@@ -62,8 +60,7 @@ public static class UseCasesDependencyInjection
         services.AddScoped<CreateCatUseCase>();
         services.AddScoped<UpdateCatUseCase>();
         services.AddScoped<DeleteCatUseCase>();
-
-        services.AddScoped<LoginUseCase>();
+        
         services.AddScoped<UserListUseCase>();
         services.AddScoped<UserUpdateUseCase>();
         services.AddScoped<UserCreateUseCase>();
@@ -71,7 +68,6 @@ public static class UseCasesDependencyInjection
         services.AddScoped<RequestPasswordResetUseCase>();
         services.AddScoped<VerifyPasswordResetCodeUseCase>();
         services.AddScoped<ConfirmPasswordResetUseCase>();
-        services.AddScoped<VerifyTwoFactorUseCase>();
         services.AddScoped<EnableTwoFactorUseCase>();
         services.AddScoped<DisableTwoFactorUseCase>();
 

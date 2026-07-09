@@ -16,7 +16,6 @@ using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestLinesByCatWitho
 using ExtendFile.Panelis.Application.Modules.Test.Queries.GetTestLinesByCatId;
 using ExtendFile.Panelis.BuildingBlocks.Pagination;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using ExtendFile.Panelis.Domain.Interfaces.Repositories.Test;
 using ExtendFile.Panelis.Domain.Modules.Test.Aggregates;
@@ -30,9 +29,9 @@ namespace ExtendFile.Panelis.Presentation.Controllers.V1;
 /// </summary>
 /// <remarks>
 /// Este controller expõe endpoints para criação, consulta, atualização e exclusão de testes no sistema.
-/// Todos os endpoints requerem autenticação via JWT Bearer.
+/// Todos os endpoints requerem autenticação.
 /// </remarks>
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]

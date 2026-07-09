@@ -3,8 +3,6 @@ using ExtendFile.Panelis.Infrastructure.Services;
 using ExtendFile.Panelis.Infrastructure.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using AuthenticationService = Microsoft.AspNetCore.Authentication.AuthenticationService;
-using IAuthenticationService = Microsoft.AspNetCore.Authentication.IAuthenticationService;
 
 namespace ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Services;
 
@@ -12,9 +10,6 @@ public static class ServicesDependencyInjection
 {
     public static void AddServicesDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
-        services.AddScoped<ITokenJwtService, TokenJwtService>();
-
         services.AddEmailService(configuration);
         services.AddBrevoEmailService(configuration);
 

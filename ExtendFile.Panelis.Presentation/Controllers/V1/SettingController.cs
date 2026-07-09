@@ -5,7 +5,6 @@ using ExtendFile.Panelis.Application.Modules.Setting.Requests.UpsertSetting;
 using ExtendFile.Panelis.Application.Modules.Setting.Responses;
 using ExtendFile.Panelis.Presentation.Extensions;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +13,7 @@ namespace ExtendFile.Panelis.Presentation.Controllers.V1;
 /// <summary>
 /// Controller para gerenciamento de configurações do sistema
 /// </summary>
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]

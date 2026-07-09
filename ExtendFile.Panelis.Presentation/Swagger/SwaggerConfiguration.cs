@@ -13,6 +13,7 @@ public static class SwaggerConfiguration
         services.AddSwaggerGen(options =>
         {
             options.CustomSchemaIds(type => type.FullName);
+            options.OperationFilter<ApiKeyOperationFilter>();
 
             options.SwaggerDoc("v1", new OpenApiInfo
             {
@@ -27,6 +28,14 @@ public static class SwaggerConfiguration
                 Type = SecuritySchemeType.ApiKey,
                 In = ParameterLocation.Header,
                 Description = "Digite o token JWT com o prefixo 'Bearer'. Exemplo: Bearer {seu token}"
+            });
+
+            options.AddSecurityDefinition("X-Api-Key", new OpenApiSecurityScheme
+            {
+                Name = "X-Api-Key",
+                Type = SecuritySchemeType.ApiKey,
+                In = ParameterLocation.Header,
+                Description = "API Key da aplicação no identity server"
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement

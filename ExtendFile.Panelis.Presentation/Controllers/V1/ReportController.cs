@@ -4,7 +4,6 @@ using ExtendFile.Panelis.Application.Modules.Report.Queries.GetCatFoodConsumptio
 using ExtendFile.Panelis.Application.Modules.Report.Requests.GetCatFoodConsumption;
 using ExtendFile.Panelis.Application.Modules.Report.Responses;
 using ExtendFile.Panelis.Presentation.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ExtendFile.Panelis.Presentation.Controllers.V1;
@@ -12,7 +11,7 @@ namespace ExtendFile.Panelis.Presentation.Controllers.V1;
 /// <summary>
 /// Controller para geração de relatórios
 /// </summary>
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]

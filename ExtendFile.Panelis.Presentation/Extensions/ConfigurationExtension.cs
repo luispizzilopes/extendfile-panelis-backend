@@ -15,12 +15,13 @@ public static class ConfigurationExtension
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddSwaggerConfiguration(configurationManager);
-        
+
         services.AddInfrastructureDependencyInjection(configurationManager, hostingEnvironment);
         services.AddApplicationDependencyInjection(configurationManager);
-        
+        services.AddIntrospectAuth(configurationManager);
+
         services.AddCustomLogger(configurationManager);
 
-        services.AddCors(); 
+        services.AddCors();
     }
 }
