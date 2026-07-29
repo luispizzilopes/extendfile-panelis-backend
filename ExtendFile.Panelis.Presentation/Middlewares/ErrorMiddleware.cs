@@ -33,8 +33,7 @@ public class ErrorMiddleware
     {
         var error = Error.Failure(
             code: "UnexpectedError",
-            description: _env.IsLocalhost() || _env.IsDevelopment() ? 
-                ex.InnerException?.Message ?? ex.Message : "Ocorreu um erro durante a execução da aplicação"
+            description: ex.InnerException?.Message ?? ex.Message
         );
 
         var settings = new JsonSerializerSettings
