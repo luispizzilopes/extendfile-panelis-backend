@@ -1,5 +1,4 @@
 using ExtendFile.Panelis.Application.Interfaces.Clients;
-using ExtendFile.Panelis.Presentation.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +18,6 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("validate-token")]
-    [RequiresApiKey]
     [ProducesResponseType(typeof(ValidateTokenResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> ValidateToken([FromBody] ValidateTokenRequest request, CancellationToken cancellationToken)
