@@ -1,5 +1,7 @@
 using ExtendFile.Panelis.Application.Modules.House.UseCases.CreateBox;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.CreateHouse;
+using ExtendFile.Panelis.Application.Modules.House.UseCases.DeleteBoxDocument;
+using ExtendFile.Panelis.Application.Modules.House.UseCases.UploadBoxDocument;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.DeleteBox;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.DeleteHouse;
 using ExtendFile.Panelis.Application.Modules.House.UseCases.GetHouseById;
@@ -53,6 +55,8 @@ public static class UseCasesDependencyInjection
         services.AddScoped<CreateBoxUseCase>();
         services.AddScoped<UpdateBoxUseCase>();
         services.AddScoped<DeleteBoxUseCase>();
+        services.AddScoped<UploadBoxDocumentUseCase>();
+        services.AddScoped<DeleteBoxDocumentUseCase>();
         
         services.AddScoped<GetCatByIdUseCase>();
         services.AddScoped<GetCatsUseCase>();

@@ -1,4 +1,5 @@
 using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Caching;
+using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Clients;
 using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Context;
 using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Identity;
 using ExtendFile.Panelis.CrossCutting.IoC.Infrastructure.Repositories;
@@ -23,5 +24,6 @@ public static class Infrastructure
         services.AddUnitOfWorkDependencyInjection();
         services.AddServicesDependencyInjection(configuration);
         services.AddIdentityDependencyInjection();
+        services.AddFileListClient(configuration);
     }
 }

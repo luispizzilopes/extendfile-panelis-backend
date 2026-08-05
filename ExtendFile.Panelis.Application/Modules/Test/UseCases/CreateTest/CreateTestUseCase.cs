@@ -1,4 +1,6 @@
 using ErrorOr;
+using ExtendFile.Panelis.Application.Modules.House.Requests.UploadBoxDocument;
+using ExtendFile.Panelis.Application.Modules.House.UseCases.UploadBoxDocument;
 using ExtendFile.Panelis.Application.Modules.Test.Requests.CreateTest;
 using ExtendFile.Panelis.Application.Modules.Test.Responses.CreateTest;
 using ExtendFile.Panelis.Application.Modules.Test.UseCases.ProcessTest;
@@ -19,12 +21,18 @@ public class CreateTestUseCase
     private readonly IUnitOfWork _unitOfWork;
     private readonly ProcessTestUseCase _processTestUseCase;
     private readonly GetSettingUseCase _getSettingUseCase;
+    private readonly UploadBoxDocumentUseCase _uploadBoxDocumentUseCase;
 
-    public CreateTestUseCase(IUnitOfWork unitOfWork, ProcessTestUseCase processTestUseCase, GetSettingUseCase getSettingUseCase)
+    public CreateTestUseCase(
+        IUnitOfWork unitOfWork,
+        ProcessTestUseCase processTestUseCase,
+        GetSettingUseCase getSettingUseCase,
+        UploadBoxDocumentUseCase uploadBoxDocumentUseCase)
     {
         _unitOfWork = unitOfWork;
         _processTestUseCase = processTestUseCase;
         _getSettingUseCase = getSettingUseCase;
+        _uploadBoxDocumentUseCase = uploadBoxDocumentUseCase;
     }
 
     public async Task<ErrorOr<CreateTestResponse>> Execute(CreateTestRequest request, CancellationToken cancellationToken)
@@ -84,6 +92,22 @@ public class CreateTestUseCase
         var test = CreateTestAggregate(request.File.FileName, request.BoxId, parsedRecord.TestDate, testLines);
 
         await UpdateCatsDaysWithoutEatingAsync(testLines, cancellationToken);
+
+        var house = await _unitOfWork.HouseRepository.GetHouseByBoxIdAsync(request.BoxId, cancellationToken);
+        if (house is null)
+            return Error.NotFound(description: "Casa/Prédio do box não encontrada");
+
+        var uploadResult = await _uploadBoxDocumentUseCase.ExecuteAsync(
+            new UploadBoxDocumentRequest
+            {
+                HouseId = house.Id.Value,
+                BoxId = request.BoxId,
+                File = request.File
+            },
+            cancellationToken);
+
+        if (uploadResult.IsError)
+            return uploadResult.Errors;
 
         await _unitOfWork.TestRepository.CreateTestAsync(test, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
