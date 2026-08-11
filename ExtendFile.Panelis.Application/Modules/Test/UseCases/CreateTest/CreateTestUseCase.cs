@@ -52,6 +52,14 @@ public class CreateTestUseCase
         var rawText = await ReadFileAsync(request.File);
         var parsedRecord = _processTestUseCase.Execute(rawText);
 
+        var uniqueHashes = parsedRecord.Lines.Select(l => l.CatHash).Distinct();
+        foreach (var hash in uniqueHashes)
+        {
+            var activeCount = await _unitOfWork.CatRepository.GetActiveCatsCountByHashAsync(hash, cancellationToken);
+            if (activeCount > 1)
+                return Error.Validation("Chip duplicado", $"Existem {activeCount} gatos ativos com o chip '{hash}'. Corrija o cadastro antes de subir o teste.");
+        }
+
         var testDate = parsedRecord.TestDate.Date.ToUniversalTime();
         
         if (request.ValidateDateFile is true)

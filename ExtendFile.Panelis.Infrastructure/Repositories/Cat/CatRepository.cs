@@ -36,6 +36,13 @@ public class CatRepository : ICatRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<int> GetActiveCatsCountByHashAsync(string hash, CancellationToken cancellationToken)
+    {
+        return await _context.Cats
+            .Where(x => x.Hash == hash && x.IsActive == true)
+            .CountAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Aggregates.Cat>> GetCatsByBoxIdAsync(
         Guid boxId,
         CancellationToken cancellationToken)
