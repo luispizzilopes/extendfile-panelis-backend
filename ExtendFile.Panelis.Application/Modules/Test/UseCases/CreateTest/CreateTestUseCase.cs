@@ -97,7 +97,7 @@ public class CreateTestUseCase
         if (house is null)
             return Error.NotFound(description: "Casa/Prédio do box não encontrada");
 
-        var uploadResult = await _uploadBoxDocumentUseCase.ExecuteAsync(
+        await _uploadBoxDocumentUseCase.ExecuteAsync(
             new UploadBoxDocumentRequest
             {
                 HouseId = house.Id.Value,
@@ -105,9 +105,6 @@ public class CreateTestUseCase
                 File = request.File
             },
             cancellationToken);
-
-        if (uploadResult.IsError)
-            return uploadResult.Errors;
 
         await _unitOfWork.TestRepository.CreateTestAsync(test, cancellationToken);
         await _unitOfWork.CommitAsync(cancellationToken);
