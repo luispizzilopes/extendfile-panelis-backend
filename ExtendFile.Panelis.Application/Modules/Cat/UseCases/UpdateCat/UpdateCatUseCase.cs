@@ -37,9 +37,11 @@ public class UpdateCatUseCase
         if (box is not null && currentCatsCount > box.MaxQuantity)
             return Error.Validation("Box está cheio", $"O box '{box.Name}' já está totalmente ocupado. Capacidade máxima: {box.MaxQuantity}");
         
+        var hash = request.IsActive ? request.Hash : string.Empty;
+
         cat.Update(
             request.Name,
-            request.Hash,
+            hash,
             request.DateOfBirth,
             request.Weight,
             request.Sex,

@@ -18,8 +18,6 @@ public class UpdateCatCommandValidator : AbstractValidator<UpdateCatCommand>
             .WithMessage("Nome não pode exceder 200 caracteres");
 
         RuleFor(x => x.Request.Hash)
-            .NotEmpty()
-            .WithMessage("Hash é obrigatório")
             .MaximumLength(500)
             .WithMessage("Hash não pode exceder 500 caracteres");
 
